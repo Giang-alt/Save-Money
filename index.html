@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Money - Quản Lý Chi Tiêu Thông Minh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        }
+        
+        .welcome-bg {
+            background: linear-gradient(135deg, #0f766e 0%, #1e40af 50%, #059669 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .title-animation {
+            opacity: 0;
+            transform: translateY(50px);
+            animation: titleFadeIn 1.5s ease-out 0.5s forwards;
+        }
+        
+        @keyframes titleFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .word-hover {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .word-hover:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 16px 20px;
+            border-radius: 16px;
+            box-shadow: 
+                0 25px 50px rgba(31, 38, 135, 0.4),
+                0 8px 32px rgba(31, 38, 135, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            white-space: nowrap;
+            z-index: 100;
+            min-width: 220px;
+        }
+        
+        /* Enhanced glass effect for better visibility */
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 16px;
+            pointer-events: none;
+        }
+        
+        .word-hover:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Responsive tooltip positioning */
+        @media (max-width: 768px) {
+            .tooltip {
+                bottom: -100px;
+                min-width: 200px;
+                font-size: 0.85rem;
+                padding: 14px 18px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tooltip {
+                bottom: -110px;
+                min-width: 180px;
+                font-size: 0.8rem;
+                padding: 12px 16px;
+            }
+        }
+        
+        /* Responsive positioning */
+        @media (max-width: 768px) {
+            .absolute.top-8.left-8 {
+                top: 1rem;
+                left: 1rem;
+            }
+            
+            .absolute.top-8.left-8 h1 {
+                font-size: 1.125rem;
+            }
+            
+            .absolute.top-8.left-8 .w-12.h-12 {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            /* Auth buttons responsive */
+            .absolute.top-8.right-8 {
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            .absolute.top-8.right-8 button {
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Stack auth buttons vertically on very small screens */
+            .absolute.top-8.right-8 .flex {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .absolute.top-8.right-8 button {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.7rem;
+            }
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-icon:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { top: 60%; left: 85%; animation-delay: 1s; }
+        .floating-icon:nth-child(3) { top: 30%; left: 80%; animation-delay: 2s; }
+        .floating-icon:nth-child(4) { top: 70%; left: 15%; animation-delay: 3s; }
+        .floating-icon:nth-child(5) { top: 10%; left: 60%; animation-delay: 4s; }
+        .floating-icon:nth-child(6) { top: 80%; left: 50%; animation-delay: 5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+        
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        
+        .nav-item.active {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #059669;
+        }
+        
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #10b981;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .modal-enter {
+            animation: modalEnter 0.3s ease-out;
+        }
+        
+        @keyframes modalEnter {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9) translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+        
+        .page-transition {
+            animation: pageSlideIn 0.8s ease-out;
+        }
+        
+        @keyframes pageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Glass Effect Styles */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-effect-strong {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .glass-effect-subtle {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .glass-text-container {
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Hover transitions for glass effects */
+        .glass-effect-subtle:hover {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .glass-effect-strong:hover {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Glass element smooth transitions */
+        .glass-effect,
+        .glass-effect-subtle,
+        .glass-effect-strong,
+        .glass-text-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="min-h-screen welcome-bg relative">
+        <!-- Logo in top left -->
+        <div class="absolute top-8 left-8 z-20 title-animation">
+            <div class="flex items-center gap-3 glass-effect p-4 rounded-2xl">
+                <div class="gradient-bg w-12 h-12 rounded-xl flex items-center justify-center shadow-xl">
+                    <span class="text-white font-bold text-xl">💰</span>
+                </div>
+                <h1 class="text-white text-xl font-bold">Save Money</h1>
+            </div>
+        </div>
+        
+        <!-- Auth buttons in top right -->
+        <div class="absolute top-8 right-8 z-20 title-animation">
+            <div class="flex gap-3 glass-effect p-2 rounded-xl">
+                <button onclick="showLoginModal()" class="glass-effect-subtle text-white px-6 py-2 rounded-lg font-medium text-sm hover:glass-effect-strong transition-all duration-300">
+                    Đăng nhập
+                </button>
+                <button onclick="showRegisterModal()" class="glass-effect-strong text-white px-6 py-2 rounded-lg font-medium text-sm hover:bg-white/30 transition-all duration-300">
+                    Đăng ký ngay
+                </button>
+            </div>
+        </div>
+        
+        <!-- Floating Background Elements -->
+        <div class="floating-elements">
+            <div class="floating-icon">💰</div>
+            <div class="floating-icon">📊</div>
+            <div class="floating-icon">💳</div>
+            <div class="floating-icon">📈</div>
+            <div class="floating-icon">🎯</div>
+            <div class="floating-icon">💎</div>
+        </div>
+        
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="text-center z-10 px-4">
+                <!-- Animated Title -->
+                <div class="title-animation">
+                    <h2 class="text-5xl md:text-7xl font-black text-white mb-4 leading-relaxed">
+                        <span class="word-hover inline-block">
+                            QUẢN LÝ
+                            <div class="tooltip">
+                                <p class="text-gray-800 font-medium text-sm">Ghi lại hôm nay</p>
+                                <p class="text-black-600 text-xs mt-1">Phân tích chi tiết từng danh mục</p>
+                                <p class="text-black-600 text-xs">Đặt mục tiêu tài chính rõ ràng</p>
+                            </div>
+                        </span>
+                        <br class="block md:hidden">
+                        <span class="word-hover inline-block ml-0 md:ml-8 mt-2 md:mt-0">
+                            CHI TIÊU
+                            <div class="tooltip">
+                                <p class="text-gray-800 font-medium text-sm">Tiết kiệm cho ngày mai</p>
+                                <p class="text-black-600 text-xs mt-1">Giao diện thân thiện, dễ sử dụng</p>
+                                <p class="text-black-600 text-xs">Đạt được tự do tài chính</p>
+                            </div>
+                        </span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer section -->
+        <div class="absolute bottom-8 left-0 right-0 z-20">
+            <div class="text-center space-y-4">
+                <p class="text-xl md:text-2xl text-white/80 font-light title-animation">
+                    Giải pháp thông minh cho tài chính cá nhân
+                </p>
+                <div class="title-animation">
+                    <button onclick="enterApp()" class="text-white/70 hover:text-white underline text-sm transition-colors">
+                        Hoặc xem demo ngay →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full modal-enter">
+            <div class="p-6">
+                <div class="text-center mb-5">
+                    <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">🔑</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Đăng nhập</h3>
+                    <p class="text-gray-600 mt-1 text-sm">Chào mừng bạn trở lại!</p>
+                </div>
+                
+                <form class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" placeholder="your@email.com" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Mật khẩu</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div class="flex items-center justify-between text-xs">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                            <span class="ml-2 text-gray-600">Ghi nhớ</span>
+                        </label>
+                        <a href="#" class="text-green-600 hover:text-green-700">Quên mật khẩu?</a>
+                    </div>
+                    
+                    <button type="button" onclick="enterApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
+                        Đăng nhập
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600 text-xs">Chưa có tài khoản? 
+                        <button onclick="showRegisterModal(); hideLoginModal();" class="text-green-600 hover:text-green-700 font-medium">Đăng ký ngay</button>
+                    </p>
+                </div>
+                
+                <button onclick="hideLoginModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full modal-enter">
+            <div class="p-6">
+                <div class="text-center mb-5">
+                    <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <span class="text-white font-bold text-lg">✨</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Đăng ký</h3>
+                    <p class="text-gray-600 mt-1 text-sm">Tạo tài khoản miễn phí</p>
+                </div>
+                
+                <form class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Họ và tên</label>
+                        <input type="text" placeholder="Nguyễn Văn A" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" placeholder="your@email.com" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Mật khẩu</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                    </div>
+                    
+                    <div class="flex items-center text-xs">
+                        <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                        <span class="ml-2 text-gray-600">Tôi đồng ý với <a href="#" class="text-green-600 hover:text-green-700">Điều khoản sử dụng</a></span>
+                    </div>
+                    
+                    <button type="button" onclick="enterApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
+                        Tạo tài khoản
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600 text-xs">Đã có tài khoản? 
+                        <button onclick="showLoginModal(); hideRegisterModal();" class="text-green-600 hover:text-green-700 font-medium">Đăng nhập</button>
+                    </p>
+                </div>
+                
+                <button onclick="hideRegisterModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (Hidden initially) -->
+    <div id="mainApp" class="hidden">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <div class="gradient-bg w-10 h-10 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">💰</span>
+                        </div>
+                        <h1 class="ml-3 text-xl font-semibold text-gray-900">Save Money</h1>
+                    </div>
+                    
+                    <div class="hidden md:flex space-x-1">
+                        <button onclick="showPage('dashboard')" class="nav-item active px-4 py-2 rounded-lg text-sm font-medium">
+                            Dashboard
+                        </button>
+                        <button onclick="showPage('transactions')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
+                            Quản lý chi tiêu
+                        </button>
+                        <button onclick="showPage('budget')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
+                            Ngân sách
+                        </button>
+                        <button onclick="showPage('reports')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
+                            Báo cáo
+                        </button>
+                        <button onclick="showPage('settings')" class="nav-item px-4 py-2 rounded-lg text-sm font-medium text-gray-600">
+                            Cài đặt
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button onclick="showTransactionModal()" class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            + Thêm giao dịch
+                        </button>
+                        <button onclick="logout()" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-lg text-sm">
+                            Đăng xuất
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page fade-in">
+                <!-- Overview Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Số dư hiện tại</p>
+                                <p id="currentBalance" class="text-2xl font-bold text-gray-900">
+                                    <span class="animate-pulse bg-gray-200 rounded h-8 w-32 inline-block"></span>
+                                </p>
+                                <p id="balanceChange" class="text-sm mt-1">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-24 inline-block"></span>
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <span class="text-green-600 text-xl">💳</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Tổng thu nhập</p>
+                                <p id="totalIncome" class="text-2xl font-bold text-gray-900">
+                                    <span class="animate-pulse bg-gray-200 rounded h-8 w-32 inline-block"></span>
+                                </p>
+                                <p id="incomeChange" class="text-sm mt-1">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-20 inline-block"></span>
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <span class="text-blue-600 text-xl">📈</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Tổng chi tiêu</p>
+                                <p id="totalExpense" class="text-2xl font-bold text-gray-900">
+                                    <span class="animate-pulse bg-gray-200 rounded h-8 w-32 inline-block"></span>
+                                </p>
+                                <p id="expenseChange" class="text-sm mt-1">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-20 inline-block"></span>
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                <span class="text-red-600 text-xl">📉</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Thống kê nhanh</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Giao dịch hôm nay</span>
+                                <span id="todayTransactions" class="font-semibold text-blue-600">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-8 inline-block"></span>
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Danh mục chi tiêu nhiều nhất</span>
+                                <span id="topCategory" class="font-semibold text-red-600">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-16 inline-block"></span>
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Mục tiêu tiết kiệm</span>
+                                <span id="savingsProgress" class="font-semibold text-green-600">
+                                    <span class="animate-pulse bg-gray-200 rounded h-4 w-12 inline-block"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Lời khuyên tài chính</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-yellow-50 rounded-lg">
+                                <p class="text-sm text-yellow-800">💡 Chi tiêu ăn uống tháng này đã vượt 80% ngân sách</p>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <p class="text-sm text-green-800">✅ Bạn đã tiết kiệm được 5.7 triệu tháng này</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Giao dịch gần đây</h3>
+                        <button onclick="showAllTransactions()" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Xem tất cả</button>
+                    </div>
+                    <div id="recentTransactionsList" class="space-y-4">
+                        <!-- Loading state -->
+                        <div class="flex justify-center items-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            <span class="ml-2 text-gray-600">Đang tải...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Page -->
+            <div id="transactions" class="page hidden">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Quản lý chi tiêu</h2>
+                        <div class="flex items-center space-x-3">
+                            <!-- Filter controls -->
+                            <select id="filterType" onchange="filterTransactions()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="">Tất cả loại</option>
+                                <option value="income">Thu nhập</option>
+                                <option value="expense">Chi tiêu</option>
+                            </select>
+                            <select id="filterCategory" onchange="filterTransactions()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="">Tất cả danh mục</option>
+                                <option value="Ăn uống">🍕 Ăn uống</option>
+                                <option value="Di chuyển">⛽ Di chuyển</option>
+                                <option value="Mua sắm">🛍️ Mua sắm</option>
+                                <option value="Giải trí">🎬 Giải trí</option>
+                                <option value="Hóa đơn">📄 Hóa đơn</option>
+                                <option value="Lương">💰 Lương</option>
+                                <option value="Thưởng">🎁 Thưởng</option>
+                                <option value="Khác">📝 Khác</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Transaction List -->
+                    <div id="allTransactionsList" class="space-y-3">
+                        <!-- Loading state -->
+                        <div class="flex justify-center items-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            <span class="ml-2 text-gray-600">Đang tải...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Load more button -->
+                    <div id="loadMoreContainer" class="mt-6 text-center hidden">
+                        <button id="loadMoreBtn" onclick="loadMoreTransactions()" class="btn-primary text-white px-6 py-2 rounded-lg">
+                            Tải thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Page -->
+            <div id="budget" class="page hidden">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Quản lý ngân sách</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium text-gray-900">Ăn uống</span>
+                                    <span class="text-sm text-gray-500">2,500,000₫ / 3,000,000₫</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-600 h-2 rounded-full" style="width: 83%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">Còn lại: 500,000₫</p>
+                            </div>
+                            
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium text-gray-900">Di chuyển</span>
+                                    <span class="text-sm text-gray-500">1,800,000₫ / 2,000,000₫</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 90%"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-1">Còn lại: 200,000₫</p>
+                            </div>
+                            
+                            <div class="p-4 border border-gray-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="font-medium text-gray-900">Giải trí</span>
+                                    <span class="text-sm text-gray-500">1,200,000₫ / 1,000,000₫</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm text-red-600 mt-1">Vượt ngân sách: 200,000₫</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Thiết lập ngân sách mới</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Danh mục</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option>Chọn danh mục</option>
+                                        <option>Ăn uống</option>
+                                        <option>Di chuyển</option>
+                                        <option>Mua sắm</option>
+                                        <option>Giải trí</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Hạn mức (₫)</label>
+                                    <input type="number" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Thời gian</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                        <option>Hàng tháng</option>
+                                        <option>Hàng tuần</option>
+                                        <option>Hàng năm</option>
+                                    </select>
+                                </div>
+                                <button class="w-full btn-primary text-white py-2 rounded-lg">Tạo ngân sách</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reports" class="page hidden">
+                <!-- Interactive Chart Section -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Biểu đồ phân tích</h2>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="changeChart('prev')" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <span id="chartTitle" class="text-sm font-medium text-gray-700 min-w-[120px] text-center">Biểu đồ tròn</span>
+                            <button onclick="changeChart('next')" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="relative h-80">
+                        <canvas id="reportChart"></canvas>
+                    </div>
+                    
+                    <div id="chartDescription" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600">Biểu đồ tròn hiển thị tỷ lệ chi tiêu theo từng danh mục trong tháng này.</p>
+                    </div>
+                </div>
+                
+                <!-- Detailed Reports -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Báo cáo tháng này</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Tổng thu nhập</span>
+                                <span class="font-semibold text-green-600">+18,500,000₫</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Tổng chi tiêu</span>
+                                <span class="font-semibold text-red-600">-12,750,000₫</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="text-gray-700">Tiết kiệm được</span>
+                                <span class="font-semibold text-green-600">+5,750,000₫</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">So sánh với tháng trước</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Thu nhập</span>
+                                <span class="font-semibold text-green-600">+8.5%</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Chi tiêu</span>
+                                <span class="font-semibold text-red-600">+12.3%</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Tiết kiệm</span>
+                                <span class="font-semibold text-yellow-600">-2.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Analysis -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Phân tích chi tiết</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-2xl mr-2">🍕</span>
+                                <span class="font-medium text-gray-900">Ăn uống</span>
+                            </div>
+                            <p class="text-2xl font-bold text-red-600 mb-1">3,500,000₫</p>
+                            <p class="text-sm text-gray-500">27.5% tổng chi tiêu</p>
+                            <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-red-500 h-2 rounded-full" style="width: 27.5%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-2xl mr-2">⛽</span>
+                                <span class="font-medium text-gray-900">Di chuyển</span>
+                            </div>
+                            <p class="text-2xl font-bold text-blue-600 mb-1">2,200,000₫</p>
+                            <p class="text-sm text-gray-500">17.3% tổng chi tiêu</p>
+                            <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 17.3%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-2xl mr-2">🛍️</span>
+                                <span class="font-medium text-gray-900">Mua sắm</span>
+                            </div>
+                            <p class="text-2xl font-bold text-yellow-600 mb-1">1,800,000₫</p>
+                            <p class="text-sm text-gray-500">14.1% tổng chi tiêu</p>
+                            <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 14.1%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings" class="page hidden">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Cài đặt</h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Thông tin cá nhân</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
+                                    <input type="text" value="Nguyễn Văn A" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <input type="email" value="nguyenvana@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Tùy chọn hiển thị</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700">Hiển thị thông báo</span>
+                                    <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-green-600 transition-colors">
+                                        <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6"></span>
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700">Chế độ tối</span>
+                                    <button class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 transition-colors">
+                                        <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button class="btn-primary text-white px-6 py-2 rounded-lg">Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Success Notification -->
+        <div id="successNotification" class="fixed top-4 right-4 z-60 hidden">
+            <div class="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 transform transition-all duration-300 translate-x-full">
+                <div class="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-semibold" id="successTitle">Thêm giao dịch thành công!</p>
+                    <p class="text-sm opacity-90" id="successMessage">Giao dịch đã được lưu vào cơ sở dữ liệu.</p>
+                </div>
+                <button onclick="hideSuccessNotification()" class="text-white hover:text-green-100 ml-4">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Transaction Modal -->
+        <div id="transactionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto modal-enter">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">Thêm giao dịch mới</h3>
+                        <button onclick="hideTransactionModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                    </div>
+                    
+                    <form id="transactionForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Loại giao dịch</label>
+                            <select id="transactionType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="expense">Chi tiêu</option>
+                                <option value="income">Thu nhập</option>
+                            </select>
+                        </div>
+                        
+                                                 <div>
+                             <label class="block text-sm font-medium text-gray-700 mb-2">Danh mục</label>
+                             <select id="transactionCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                 <option value="Ăn uống">🍕 Ăn uống</option>
+                                 <option value="Di chuyển">⛽ Di chuyển</option>
+                                 <option value="Mua sắm">🛍️ Mua sắm</option>
+                                 <option value="Giải trí">🎬 Giải trí</option>
+                                 <option value="Hóa đơn">📄 Hóa đơn</option>
+                                 <option value="Lương">💰 Lương</option>
+                                 <option value="Thưởng">🎁 Thưởng</option>
+                                 <option value="Khác">📝 Khác</option>
+                             </select>
+                         </div>
+                        
+                                                 <div>
+                             <label class="block text-sm font-medium text-gray-700 mb-2">Số tiền (₫)</label>
+                             <input type="text" id="transactionAmount" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" oninput="formatAmount(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                         </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ngày</label>
+                            <input type="date" id="transactionDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+                            <input type="text" id="transactionNote" placeholder="Mô tả giao dịch..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" onclick="hideTransactionModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg border border-gray-300">
+                                Hủy
+                            </button>
+                            <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg">
+                                Thêm giao dịch
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function hideRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+
+
+        // Logout function
+        function logout() {
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('welcomePage').style.display = 'flex';
+        }
+
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.remove('hidden');
+            document.getElementById(pageId).classList.add('fade-in');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Transaction modal functionality
+        function showTransactionModal() {
+            const modal = document.getElementById('transactionModal');
+            modal.classList.remove('hidden');
+            
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('transactionDate').value = today;
+            
+            // Focus on amount field
+            setTimeout(() => {
+                document.getElementById('transactionAmount').focus();
+            }, 100);
+        }
+
+        function hideTransactionModal() {
+            const modal = document.getElementById('transactionModal');
+            modal.classList.add('hidden');
+            
+            // Reset form
+            document.getElementById('transactionForm').reset();
+        }
+
+        // Function để format số tiền
+        function formatAmount(input) {
+            // Loại bỏ tất cả ký tự không phải số
+            let value = input.value.replace(/[^\d]/g, '');
+            
+            // Nếu không có giá trị, để trống
+            if (value === '') {
+                input.value = '';
+                return;
+            }
+            
+            // Chuyển đổi thành số và format với dấu phẩy
+            let numValue = parseInt(value);
+            input.value = numValue.toLocaleString('vi-VN');
+        }
+        
+        // Function để lấy số tiền thực từ input đã format
+        function getAmountValue(input) {
+            return parseInt(input.value.replace(/[^\d]/g, ''));
+        }
+        
+        // Handle form submission
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('transactionType').value;
+            const category = document.getElementById('transactionCategory').value;
+            const amount = getAmountValue(document.getElementById('transactionAmount'));
+            const date = document.getElementById('transactionDate').value;
+            const note = document.getElementById('transactionNote').value;
+            
+            if (!amount || amount <= 0) {
+                alert('Vui lòng nhập số tiền hợp lệ!');
+                return;
+            }
+            
+            // Chuẩn bị dữ liệu để gửi đến API
+            const transactionData = {
+                type: type,
+                category: category,
+                amount: parseFloat(amount),
+                date: date,
+                note: note
+            };
+            
+            // Gọi API để thêm giao dịch
+            fetch('/save_money/php/api_them_giao_dich.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(transactionData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Thêm giao dịch thành công
+                    const title = `Đã thêm ${type === 'expense' ? 'chi tiêu' : 'thu nhập'} thành công!`;
+                    const message = `Số tiền: ${amount.toLocaleString('vi-VN')}₫ | Danh mục: ${category}`;
+                    showSuccessNotification(title, message);
+                    
+                    // Cập nhật danh sách giao dịch và thống kê
+                    loadRecentTransactions();
+                    loadDashboardStats();
+                    
+                    // Hide modal and reset form
+                    hideTransactionModal();
+                } else {
+                    // Xử lý lỗi từ API
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi gọi API:', error);
+                alert('Có lỗi xảy ra khi thêm giao dịch. Vui lòng thử lại!');
+            });
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('transactionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideTransactionModal();
+            }
+        });
+
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLoginModal();
+            }
+        });
+
+        document.getElementById('registerModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideRegisterModal();
+            }
+        });
+
+        // Chart management
+        let currentChartIndex = 0;
+        let reportChart = null;
+        
+        const chartTypes = [
+            {
+                type: 'doughnut',
+                title: 'Biểu đồ tròn',
+                description: 'Biểu đồ tròn hiển thị tỷ lệ chi tiêu theo từng danh mục trong tháng này.',
+                config: {
+                    data: {
+                        labels: ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Giải trí', 'Hóa đơn'],
+                        datasets: [{
+                            data: [3500000, 2200000, 1800000, 1500000, 3750000],
+                            backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { padding: 20, usePointStyle: true }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: 'bar',
+                title: 'Biểu đồ cột',
+                description: 'Biểu đồ cột so sánh chi tiêu giữa các danh mục một cách trực quan.',
+                config: {
+                    data: {
+                        labels: ['Ăn uống', 'Di chuyển', 'Mua sắm', 'Giải trí', 'Hóa đơn'],
+                        datasets: [{
+                            label: 'Chi tiêu (₫)',
+                            data: [3500000, 2200000, 1800000, 1500000, 3750000],
+                            backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#8b5cf6', '#10b981'],
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return (value / 1000000).toFixed(1) + 'M₫';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: 'line',
+                title: 'Biểu đồ miền',
+                description: 'Biểu đồ miền thể hiện xu hướng thu chi theo thời gian.',
+                config: {
+                    data: {
+                        labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+                        datasets: [{
+                            label: 'Thu nhập',
+                            data: [18500000, 0, 0, 0],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Chi tiêu',
+                            data: [2800000, 3200000, 3100000, 3650000],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return (value / 1000000).toFixed(1) + 'M₫';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type: 'table',
+                title: 'Báo cáo chi tiết',
+                description: 'Bảng chi tiết hiển thị đầy đủ thông tin giao dịch và phân tích.',
+                config: null
+            }
+        ];
+
+        function changeChart(direction) {
+            if (direction === 'next') {
+                currentChartIndex = (currentChartIndex + 1) % chartTypes.length;
+            } else {
+                currentChartIndex = (currentChartIndex - 1 + chartTypes.length) % chartTypes.length;
+            }
+            
+            updateChart();
+        }
+
+        function updateChart() {
+            const currentChart = chartTypes[currentChartIndex];
+            const titleElement = document.getElementById('chartTitle');
+            const descriptionElement = document.getElementById('chartDescription');
+            const chartContainer = document.querySelector('#reportChart').parentElement;
+            
+            titleElement.textContent = currentChart.title;
+            descriptionElement.innerHTML = `<p class="text-sm text-gray-600">${currentChart.description}</p>`;
+            
+            if (currentChart.type === 'table') {
+                // Show detailed table
+                chartContainer.innerHTML = `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-900">Danh mục</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-900">Số tiền</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-900">Tỷ lệ</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-900">Giao dịch</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-900">Trung bình</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 flex items-center">
+                                        <span class="mr-2">🍕</span>
+                                        <span class="font-medium">Ăn uống</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-red-600">3,500,000₫</td>
+                                    <td class="px-4 py-3 text-right">27.5%</td>
+                                    <td class="px-4 py-3 text-right">24</td>
+                                    <td class="px-4 py-3 text-right">145,833₫</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 flex items-center">
+                                        <span class="mr-2">📄</span>
+                                        <span class="font-medium">Hóa đơn</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-red-600">3,750,000₫</td>
+                                    <td class="px-4 py-3 text-right">29.4%</td>
+                                    <td class="px-4 py-3 text-right">8</td>
+                                    <td class="px-4 py-3 text-right">468,750₫</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 flex items-center">
+                                        <span class="mr-2">⛽</span>
+                                        <span class="font-medium">Di chuyển</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-red-600">2,200,000₫</td>
+                                    <td class="px-4 py-3 text-right">17.3%</td>
+                                    <td class="px-4 py-3 text-right">12</td>
+                                    <td class="px-4 py-3 text-right">183,333₫</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 flex items-center">
+                                        <span class="mr-2">🛍️</span>
+                                        <span class="font-medium">Mua sắm</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-red-600">1,800,000₫</td>
+                                    <td class="px-4 py-3 text-right">14.1%</td>
+                                    <td class="px-4 py-3 text-right">6</td>
+                                    <td class="px-4 py-3 text-right">300,000₫</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 flex items-center">
+                                        <span class="mr-2">🎬</span>
+                                        <span class="font-medium">Giải trí</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right font-semibold text-red-600">1,500,000₫</td>
+                                    <td class="px-4 py-3 text-right">11.8%</td>
+                                    <td class="px-4 py-3 text-right">9</td>
+                                    <td class="px-4 py-3 text-right">166,667₫</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else {
+                // Show chart
+                chartContainer.innerHTML = '<canvas id="reportChart"></canvas>';
+                
+                // Destroy existing chart
+                if (reportChart) {
+                    reportChart.destroy();
+                }
+                
+                // Create new chart
+                const ctx = document.getElementById('reportChart').getContext('2d');
+                reportChart = new Chart(ctx, {
+                    type: currentChart.type,
+                    ...currentChart.config
+                });
+            }
+        }
+
+        // Success notification functions
+        function showSuccessNotification(title, message) {
+            const notification = document.getElementById('successNotification');
+            const titleElement = document.getElementById('successTitle');
+            const messageElement = document.getElementById('successMessage');
+            
+            // Cập nhật nội dung
+            titleElement.textContent = title;
+            messageElement.textContent = message;
+            
+            // Hiển thị notification
+            notification.classList.remove('hidden');
+            
+            // Animation slide in
+            setTimeout(() => {
+                notification.querySelector('.bg-green-500').classList.remove('translate-x-full');
+            }, 100);
+            
+            // Tự động ẩn sau 5 giây
+            setTimeout(() => {
+                hideSuccessNotification();
+            }, 5000);
+        }
+        
+        function hideSuccessNotification() {
+            const notification = document.getElementById('successNotification');
+            const content = notification.querySelector('.bg-green-500');
+            
+            // Animation slide out
+            content.classList.add('translate-x-full');
+            
+            // Ẩn notification sau khi animation hoàn thành
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 300);
+        }
+        
+        // Initialize charts
+        function initCharts() {
+            // Only initialize if we're in the main app
+            if (!document.getElementById('mainApp').classList.contains('hidden')) {
+                updateChart();
+            }
+        }
+        
+        // Variables for transaction management
+        let allTransactionsData = [];
+        let currentPage = 1;
+        const TRANSACTIONS_PER_PAGE = 10;
+        let hasMoreTransactions = false;
+        let currentFilters = { type: '', category: '' };
+        
+        // Function to get category icon
+        function getCategoryIcon(category) {
+            const icons = {
+                'Ăn uống': '🍕',
+                'Di chuyển': '⛽',
+                'Mua sắm': '🛍️',
+                'Giải trí': '🎬',
+                'Hóa đơn': '📄',
+                'Lương': '💰',
+                'Thưởng': '🎁',
+                'Khác': '📝'
+            };
+            return icons[category] || '📝';
+        }
+        
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Hôm nay';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Hôm qua';
+            } else {
+                return date.toLocaleDateString('vi-VN');
+            }
+        }
+        
+        // Function to format amount
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+        }
+        
+        // Function to create transaction HTML
+        function createTransactionHTML(transaction) {
+            const icon = getCategoryIcon(transaction.category);
+            const isIncome = transaction.type === 'income';
+            const amountClass = isIncome ? 'text-green-600' : 'text-red-600';
+            const bgClass = isIncome ? 'bg-green-100' : 'bg-red-100';
+            const iconClass = isIncome ? 'text-green-600' : 'text-red-600';
+            const amountPrefix = isIncome ? '+' : '-';
+            
+            return `
+                <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 ${bgClass} rounded-lg flex items-center justify-center mr-3">
+                            <span class="${iconClass}">${icon}</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">${transaction.note || transaction.category}</p>
+                            <p class="text-sm text-gray-500">${transaction.category} • ${formatDate(transaction.date)}</p>
+                        </div>
+                    </div>
+                    <span class="${amountClass} font-semibold">${amountPrefix}${formatCurrency(transaction.amount)}</span>
+                </div>
+            `;
+        }
+        
+        // Function to load recent transactions (3 latest)
+        async function loadRecentTransactions() {
+            try {
+                const response = await fetch('/save_money/php/api_lay_giao_dich.php?limit=3');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const container = document.getElementById('recentTransactionsList');
+                    
+                    if (data.data.transactions.length === 0) {
+                        container.innerHTML = `
+                            <div class="text-center py-8">
+                                <div class="text-gray-400 text-4xl mb-2">📊</div>
+                                <p class="text-gray-500">Chưa có giao dịch nào</p>
+                                <p class="text-gray-400 text-sm">Thêm giao dịch đầu tiên của bạn!</p>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = data.data.transactions
+                            .map(transaction => createTransactionHTML(transaction))
+                            .join('');
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Lỗi khi tải giao dịch gần đây:', error);
+                document.getElementById('recentTransactionsList').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-red-400 text-4xl mb-2">⚠️</div>
+                        <p class="text-red-500">Không thể tải dữ liệu</p>
+                        <p class="text-gray-400 text-sm">Vui lòng thử lại sau</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Function to load all transactions with pagination
+        async function loadAllTransactions(page = 1, resetList = true) {
+            try {
+                const params = new URLSearchParams({
+                    limit: TRANSACTIONS_PER_PAGE,
+                    page: page
+                });
+                
+                // Add filters if set
+                if (currentFilters.type) params.append('type', currentFilters.type);
+                if (currentFilters.category) params.append('category', currentFilters.category);
+                
+                const response = await fetch(`/save_money/php/api_lay_giao_dich.php?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const container = document.getElementById('allTransactionsList');
+                    
+                    if (resetList) {
+                        allTransactionsData = data.data.transactions;
+                        currentPage = 1;
+                    } else {
+                        allTransactionsData = [...allTransactionsData, ...data.data.transactions];
+                    }
+                    
+                    hasMoreTransactions = data.data.has_more;
+                    
+                    if (allTransactionsData.length === 0) {
+                        container.innerHTML = `
+                            <div class="text-center py-8">
+                                <div class="text-gray-400 text-4xl mb-2">📊</div>
+                                <p class="text-gray-500">Không tìm thấy giao dịch nào</p>
+                                <p class="text-gray-400 text-sm">Thử thay đổi bộ lọc hoặc thêm giao dịch mới</p>
+                            </div>
+                        `;
+                        document.getElementById('loadMoreContainer').classList.add('hidden');
+                    } else {
+                        container.innerHTML = allTransactionsData
+                            .map(transaction => createTransactionHTML(transaction))
+                            .join('');
+                        
+                        // Show/hide load more button
+                        const loadMoreContainer = document.getElementById('loadMoreContainer');
+                        if (hasMoreTransactions) {
+                            loadMoreContainer.classList.remove('hidden');
+                        } else {
+                            loadMoreContainer.classList.add('hidden');
+                        }
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Lỗi khi tải danh sách giao dịch:', error);
+                document.getElementById('allTransactionsList').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-red-400 text-4xl mb-2">⚠️</div>
+                        <p class="text-red-500">Không thể tải dữ liệu</p>
+                        <p class="text-gray-400 text-sm">Vui lòng thử lại sau</p>
+                    </div>
+                `;
+                document.getElementById('loadMoreContainer').classList.add('hidden');
+            }
+        }
+        
+        // Function to load more transactions
+        function loadMoreTransactions() {
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            loadMoreBtn.textContent = 'Đang tải...';
+            loadMoreBtn.disabled = true;
+            
+            currentPage++;
+            loadAllTransactions(currentPage, false).finally(() => {
+                loadMoreBtn.textContent = 'Tải thêm';
+                loadMoreBtn.disabled = false;
+            });
+        }
+        
+        // Function to filter transactions
+        function filterTransactions() {
+            const typeFilter = document.getElementById('filterType').value;
+            const categoryFilter = document.getElementById('filterCategory').value;
+            
+            currentFilters = {
+                type: typeFilter,
+                category: categoryFilter
+            };
+            
+            // Reset to first page and reload
+            currentPage = 1;
+            loadAllTransactions(1, true);
+        }
+        
+        // Function to show all transactions page
+        function showAllTransactions() {
+            showPage('transactions');
+            loadAllTransactions(1, true);
+        }
+        
+        // Function to load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/save_money/php/api_thong_ke.php?period=current_month');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    
+                    // Update main stats cards
+                    document.getElementById('currentBalance').textContent = formatCurrency(stats.current_balance);
+                    document.getElementById('totalIncome').textContent = formatCurrency(stats.total_income);
+                    document.getElementById('totalExpense').textContent = formatCurrency(stats.total_expense);
+                    
+                    // Update change percentages
+                    const balanceChangeEl = document.getElementById('balanceChange');
+                    const incomeChangeEl = document.getElementById('incomeChange');
+                    const expenseChangeEl = document.getElementById('expenseChange');
+                    
+                    // Balance change
+                    const balanceChange = stats.changes.balance_change;
+                    const balanceChangeClass = balanceChange >= 0 ? 'text-green-600' : 'text-red-600';
+                    const balanceChangeIcon = balanceChange >= 0 ? '+' : '';
+                    balanceChangeEl.innerHTML = `<span class="${balanceChangeClass}">${balanceChangeIcon}${balanceChange}% so với tháng trước</span>`;
+                    
+                    // Income change
+                    const incomeChange = stats.changes.income_change;
+                    const incomeChangeClass = incomeChange >= 0 ? 'text-blue-600' : 'text-red-600';
+                    const incomeChangeIcon = incomeChange >= 0 ? '+' : '';
+                    incomeChangeEl.innerHTML = `<span class="${incomeChangeClass}">Tháng này ${incomeChangeIcon}${incomeChange}%</span>`;
+                    
+                    // Expense change
+                    const expenseChange = stats.changes.expense_change;
+                    const expenseChangeClass = expenseChange >= 0 ? 'text-red-600' : 'text-green-600';
+                    const expenseChangeIcon = expenseChange >= 0 ? '+' : '';
+                    expenseChangeEl.innerHTML = `<span class="${expenseChangeClass}">Tháng này ${expenseChangeIcon}${expenseChange}%</span>`;
+                    
+                    // Update quick stats
+                    document.getElementById('todayTransactions').textContent = stats.additional_stats.today_transactions;
+                    document.getElementById('topCategory').textContent = stats.additional_stats.top_expense_category;
+                    document.getElementById('savingsProgress').textContent = stats.additional_stats.savings_progress + '%';
+                    
+                    // Update financial advice based on data
+                    updateFinancialAdvice(stats);
+                    
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Lỗi khi tải thống kê:', error);
+                // Show error state
+                ['currentBalance', 'totalIncome', 'totalExpense'].forEach(id => {
+                    document.getElementById(id).innerHTML = '<span class="text-red-500">Lỗi tải dữ liệu</span>';
+                });
+                ['balanceChange', 'incomeChange', 'expenseChange'].forEach(id => {
+                    document.getElementById(id).innerHTML = '<span class="text-gray-400 text-xs">Không thể tải</span>';
+                });
+                ['todayTransactions', 'topCategory', 'savingsProgress'].forEach(id => {
+                    document.getElementById(id).innerHTML = '<span class="text-gray-400">--</span>';
+                });
+            }
+        }
+        
+        // Function to update financial advice based on real data
+        function updateFinancialAdvice(stats) {
+            const adviceContainer = document.querySelector('.bg-white.rounded-xl.shadow-sm.p-6.card-hover:last-child .space-y-3');
+            let adviceHTML = '';
+            
+            // Check expense vs income ratio
+            const expenseRatio = stats.total_income > 0 ? (stats.total_expense / stats.total_income) * 100 : 0;
+            
+            if (expenseRatio > 80) {
+                adviceHTML += `
+                    <div class="p-3 bg-red-50 rounded-lg">
+                        <p class="text-sm text-red-800">⚠️ Chi tiêu đã vượt 80% thu nhập (${expenseRatio.toFixed(1)}%)</p>
+                    </div>
+                `;
+            } else if (expenseRatio > 60) {
+                adviceHTML += `
+                    <div class="p-3 bg-yellow-50 rounded-lg">
+                        <p class="text-sm text-yellow-800">💡 Chi tiêu chiếm ${expenseRatio.toFixed(1)}% thu nhập - cân nhắc tiết kiệm thêm</p>
+                    </div>
+                `;
+            }
+            
+            // Savings advice
+            if (stats.net_savings > 0) {
+                adviceHTML += `
+                    <div class="p-3 bg-green-50 rounded-lg">
+                        <p class="text-sm text-green-800">✅ Bạn đã tiết kiệm được ${formatCurrency(stats.net_savings)} tháng này</p>
+                    </div>
+                `;
+            } else if (stats.net_savings < 0) {
+                adviceHTML += `
+                    <div class="p-3 bg-red-50 rounded-lg">
+                        <p class="text-sm text-red-800">📉 Tháng này bạn đã chi vượt thu nhập ${formatCurrency(Math.abs(stats.net_savings))}</p>
+                    </div>
+                `;
+            }
+            
+            // Top category spending advice
+            if (stats.additional_stats.top_expense_category !== 'Chưa có') {
+                adviceHTML += `
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-blue-800">📊 Danh mục "${stats.additional_stats.top_expense_category}" chiếm chi tiêu cao nhất</p>
+                    </div>
+                `;
+            }
+            
+            if (adviceHTML === '') {
+                adviceHTML = `
+                    <div class="p-3 bg-green-50 rounded-lg">
+                        <p class="text-sm text-green-800">🎉 Tài chính của bạn đang ổn định!</p>
+                    </div>
+                `;
+            }
+            
+            adviceContainer.innerHTML = adviceHTML;
+        }
+        
+        // Initialize data when entering app
+        function enterApp() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('page-transition');
+            hideLoginModal();
+            hideRegisterModal();
+            
+            // Initialize charts after entering app
+            setTimeout(() => {
+                initCharts();
+                // Load dashboard data
+                loadDashboardStats();
+                loadRecentTransactions();
+            }, 100);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971b58de676708d9',t:'MTc1NTYyNDI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
