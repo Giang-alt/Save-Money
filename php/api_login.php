@@ -1,36 +1,103 @@
 <?php
-header("Content-Type: application/json");
-require "connect.php";
+// API đăng nhập cho Save Money App
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Content-Type: application/json; charset=utf-8');
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-$email    = $data['email'] ?? '';
-$password = $data['password'] ?? '';
-
-if (!$email || !$password) {
-    echo json_encode(["error" => "Thiếu dữ liệu"]);
-    exit;
+// Xử lý preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-$stmt = $conn->prepare("SELECT id, fullname, password FROM users WHERE email=?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
+// Chỉ cho phép POST request
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Chỉ hỗ trợ phương thức POST'
+    ]);
+    exit();
+}
 
-if ($row = $result->fetch_assoc()) {
-    if (password_verify($password, $row['password'])) {
+require_once 'connect.php';
+
+try {
+    $pdo = getConnection();
+    
+    // Lấy dữ liệu từ request
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (!$input) {
+        http_response_code(400);
         echo json_encode([
-            "message" => "Đăng nhập thành công",
-            "user" => [
-                "id" => $row['id'],
-                "fullname" => $row['fullname'],
-                "email" => $email
+            'success' => false,
+            'message' => 'Dữ liệu đầu vào không hợp lệ'
+        ]);
+        exit();
+    }
+    
+    $email = trim($input['email'] ?? '');
+    $password = $input['password'] ?? '';
+    
+    if (!$email || !$password) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Email và mật khẩu không được để trống'
+        ]);
+        exit();
+    }
+    
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Định dạng email không hợp lệ'
+        ]);
+        exit();
+    }
+    
+    // Tìm user trong database
+    $stmt = $pdo->prepare("SELECT id, fullname, email, password, status FROM users WHERE email = ? AND status = 'active'");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+    
+    if ($user && password_verify($password, $user['password'])) {
+        // Đăng nhập thành công
+        echo json_encode([
+            'success' => true,
+            'message' => 'Đăng nhập thành công',
+            'data' => [
+                'user' => [
+                    'id' => $user['id'],
+                    'fullname' => $user['fullname'],
+                    'email' => $user['email']
+                ]
             ]
         ]);
     } else {
-        echo json_encode(["error" => "Sai mật khẩu"]);
+        // Thông tin đăng nhập không đúng
+        http_response_code(401);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Email hoặc mật khẩu không đúng'
+        ]);
     }
-} else {
-    echo json_encode(["error" => "Email không tồn tại"]);
+    
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Lỗi cơ sở dữ liệu: ' . $e->getMessage()
+    ]);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Lỗi: ' . $e->getMessage()
+    ]);
 }
 ?>

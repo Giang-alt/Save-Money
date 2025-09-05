@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Save Money - Quản Lý Chi Tiêu Thông Minh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico?v=1">
+    <link rel="icon" type="image/png" href="img/logo.png?v=1">
+    <link rel="shortcut icon" href="img/favicon.ico?v=1">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -361,6 +367,235 @@
         .glass-text-container {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        /* Password validation styles */
+        .password-rule-item {
+            transition: all 0.3s ease;
+        }
+        
+        .password-rule-icon {
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .password-rule-valid {
+            color: #059669;
+        }
+        
+        .password-rule-invalid {
+            color: #dc2626;
+        }
+        
+        /* Piggy Bank Animation Styles */
+        .piggy-bank-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 20px 50px 20px; /* Tăng margin bottom để tạo khoảng cách với title */
+        }
+        
+        .piggy-bank {
+            font-size: 6rem; /* Tăng từ 4rem lên 6rem - to hơn 50% */
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: piggyFloat 4s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .piggy-bank:hover {
+            animation: piggyShake 0.5s ease-in-out;
+        }
+        
+        @keyframes piggyFloat {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+            }
+            25% { 
+                transform: translateY(-5px) scale(1.02);
+            }
+            50% { 
+                transform: translateY(0px) scale(1);
+            }
+            75% { 
+                transform: translateY(-3px) scale(0.98);
+            }
+        }
+        
+        @keyframes piggyShake {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-3deg) scale(1.1); }
+            75% { transform: rotate(3deg) scale(1.1); }
+        }
+        
+        @keyframes piggyBlink {
+            0%, 90%, 100% { opacity: 1; }
+            95% { opacity: 0.3; }
+        }
+        
+        .piggy-eyes {
+            position: absolute;
+            top: 25%; /* Giảm từ 30% xuống 25% để không bị đè */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem; /* Tăng từ 1.2rem lên 1.8rem - to hơn */
+            z-index: 3;
+            animation: piggyBlink 6s ease-in-out infinite;
+        }
+        
+        /* Coin Drop Animation */
+        .coin-container {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 200px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .coin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b45309;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            animation: coinDrop 2s ease-in infinite;
+            opacity: 0;
+        }
+        
+        .coin:nth-child(1) { 
+            left: 20%;
+            animation-delay: 0s;
+        }
+        .coin:nth-child(2) { 
+            left: 50%;
+            animation-delay: 0.7s;
+        }
+        .coin:nth-child(3) { 
+            left: 80%;
+            animation-delay: 1.4s;
+        }
+        
+        @keyframes coinDrop {
+            0% {
+                top: -20px;
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: rotate(180deg) scale(0.8);
+            }
+            70% {
+                top: 120px;
+                opacity: 1;
+                transform: rotate(270deg) scale(0.6);
+            }
+            100% {
+                top: 150px;
+                opacity: 0;
+                transform: rotate(360deg) scale(0);
+            }
+        }
+        
+        /* Sparkle effect around piggy */
+        .piggy-sparkles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            pointer-events: none;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkleFloat 3s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        .sparkle:nth-child(1) { 
+            top: 10%; left: 20%; 
+            animation-delay: 0s;
+        }
+        .sparkle:nth-child(2) { 
+            top: 20%; right: 10%; 
+            animation-delay: 0.5s;
+        }
+        .sparkle:nth-child(3) { 
+            bottom: 20%; left: 10%; 
+            animation-delay: 1s;
+        }
+        .sparkle:nth-child(4) { 
+            bottom: 10%; right: 20%; 
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes sparkleFloat {
+            0%, 100% { 
+                opacity: 0; 
+                transform: scale(0) translateY(0px);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1) translateY(-10px);
+            }
+        }
+        
+        /* Special hover animation for coins */
+        .piggy-bank-container:hover .coin {
+            animation-duration: 1s;
+        }
+        
+        .piggy-bank-container:hover .sparkle {
+            animation-duration: 1.5s;
+        }
+        
+        /* Responsive design for piggy bank */
+        @media (max-width: 768px) {
+            .piggy-bank {
+                font-size: 4.5rem; /* Tăng từ 3rem lên 4.5rem */
+            }
+            
+            .piggy-bank-container {
+                margin: 0 10px 40px 10px; /* Thêm margin bottom */
+            }
+            
+            .coin-container {
+                width: 80px;
+                height: 150px;
+            }
+            
+            .coin {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .piggy-bank {
+                font-size: 3.5rem; /* Tăng từ 2.5rem lên 3.5rem */
+            }
+            
+            .piggy-eyes {
+                font-size: 1.4rem; /* Tăng từ 1rem lên 1.4rem */
+                top: 22%; /* Điều chỉnh vị trí cho mobile */
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -368,8 +603,9 @@
     <div id="welcomePage" class="min-h-screen welcome-bg relative">
         <!-- Logo in top left -->
         <div class="absolute top-8 left-8 z-20 title-animation">
-            <div class="flex items-center gap-3 glass-effect p-4 rounded-2xl">
-                <div class="gradient-bg w-12 h-12 rounded-xl flex items-center justify-center shadow-xl">
+            <div class="flex items-center gap-3 p-4">
+                <img src="img/logo.png" alt="Save Money Logo" class="w-12 h-12 rounded-xl shadow-xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="gradient-bg w-12 h-12 rounded-xl flex items-center justify-center shadow-xl" style="display:none;">
                     <span class="text-white font-bold text-xl">💰</span>
                 </div>
                 <h1 class="text-white text-xl font-bold">Save Money</h1>
@@ -383,7 +619,7 @@
                     Đăng nhập
                 </button>
                 <button onclick="showRegisterModal()" class="glass-effect-strong text-white px-6 py-2 rounded-lg font-medium text-sm hover:bg-white/30 transition-all duration-300">
-                    Đăng ký ngay
+                    Đăng ký
                 </button>
             </div>
         </div>
@@ -400,6 +636,31 @@
         
         <div class="flex items-center justify-center min-h-screen">
             <div class="text-center z-10 px-4">
+                <!-- Piggy Bank Animation - Above Title -->
+                <div class="title-animation mb-6">
+                    <div class="flex justify-center">
+                        <div class="piggy-bank-container">
+                            <div class="piggy-bank" title="Click me! 🐷">🐷</div>
+                            <div class="piggy-eyes">👀</div>
+                            
+                            <!-- Coin Drop Animation -->
+                            <div class="coin-container">
+                                <div class="coin">₫</div>
+                                <div class="coin">₫</div>
+                                <div class="coin">₫</div>
+                            </div>
+                            
+                            <!-- Sparkle Effects -->
+                            <div class="piggy-sparkles">
+                                <div class="sparkle"></div>
+                                <div class="sparkle"></div>
+                                <div class="sparkle"></div>
+                                <div class="sparkle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Animated Title -->
                 <div class="title-animation">
                     <h2 class="text-5xl md:text-7xl font-black text-white mb-4 leading-relaxed">
@@ -445,33 +706,40 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full modal-enter">
             <div class="p-6">
                 <div class="text-center mb-5">
-                    <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold text-lg">🔑</span>
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <img src="img/logo.png" alt="Save Money Logo" class="w-12 h-12 rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center" style="display:none;">
+                            <span class="text-white font-bold text-lg">🔑</span>
+                        </div>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900">Đăng nhập</h3>
                     <p class="text-gray-600 mt-1 text-sm">Chào mừng bạn trở lại!</p>
                 </div>
                 
-                <form class="space-y-3">
+                <form id="loginForm" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" placeholder="your@email.com" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="email" id="loginEmail" placeholder="Email của bạn" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required>
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Mật khẩu</label>
-                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="password" id="loginPassword" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required>
                     </div>
                     
                     <div class="flex items-center justify-between text-xs">
                         <label class="flex items-center">
-                            <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                            <input type="checkbox" id="rememberMe" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
                             <span class="ml-2 text-gray-600">Ghi nhớ</span>
                         </label>
                         <a href="#" class="text-green-600 hover:text-green-700">Quên mật khẩu?</a>
                     </div>
                     
-                    <button type="button" onclick="enterApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
+                    <div id="loginError" class="hidden p-2 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-red-600 text-xs"></p>
+                    </div>
+                    
+                    <button type="submit" id="loginButton" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
                         Đăng nhập
                     </button>
                 </form>
@@ -492,40 +760,66 @@
         <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full modal-enter">
             <div class="p-6">
                 <div class="text-center mb-5">
-                    <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold text-lg">✨</span>
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3">
+                        <img src="img/logo.png" alt="Save Money Logo" class="w-12 h-12 rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="gradient-bg w-12 h-12 rounded-lg flex items-center justify-center" style="display:none;">
+                            <span class="text-white font-bold text-lg">✨</span>
+                        </div>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900">Đăng ký</h3>
                     <p class="text-gray-600 mt-1 text-sm">Tạo tài khoản miễn phí</p>
                 </div>
                 
-                <form class="space-y-3">
+                <form id="registerForm" class="space-y-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Họ và tên</label>
-                        <input type="text" placeholder="Nguyễn Văn A" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="text" id="registerFullname" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required>
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" placeholder="your@email.com" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="email" id="registerEmail" placeholder="Email của bạn" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required>
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Mật khẩu</label>
-                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="password" id="registerPassword" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required minlength="6">
+                        
+                        <!-- Password validation rules -->
+                        <div id="passwordRules" class="mt-2 space-y-1 text-xs hidden">
+                            <div class="password-rule-item flex items-center space-x-2">
+                                <span id="lengthRule" class="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center password-rule-icon">
+                                    <span class="text-white text-xs">✓</span>
+                                </span>
+                                <span id="lengthText" class="text-gray-600">Ít nhất 6 ký tự</span>
+                            </div>
+                            <div class="password-rule-item flex items-center space-x-2">
+                                <span id="letterRule" class="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center password-rule-icon">
+                                    <span class="text-white text-xs">✓</span>
+                                </span>
+                                <span id="letterText" class="text-gray-600">Có ít nhất 1 chữ cái</span>
+                            </div>
+                            <div class="password-rule-item flex items-center space-x-2">
+                                <span id="numberRule" class="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center password-rule-icon">
+                                    <span class="text-white text-xs">✓</span>
+                                </span>
+                                <span id="numberText" class="text-gray-600">Có ít nhất 1 số</span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div>
                         <label class="block text-xs font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
-                        <input type="password" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm">
+                        <input type="password" id="registerConfirmPassword" placeholder="••••••••" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm" required>
                     </div>
                     
-                    <div class="flex items-center text-xs">
-                        <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500">
-                        <span class="ml-2 text-gray-600">Tôi đồng ý với <a href="#" class="text-green-600 hover:text-green-700">Điều khoản sử dụng</a></span>
+
+                    
+                    <div id="registerError" class="hidden p-2 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-red-600 text-xs"></p>
                     </div>
                     
-                    <button type="button" onclick="enterApp()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
+                    <button type="submit" id="registerButton" class="w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-lg font-medium text-sm transition-all">
                         Tạo tài khoản
                     </button>
                 </form>
@@ -548,7 +842,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center">
-                        <div class="gradient-bg w-10 h-10 rounded-lg flex items-center justify-center">
+                        <img src="img/logo.png" alt="Save Money Logo" class="w-10 h-10 rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="gradient-bg w-10 h-10 rounded-lg flex items-center justify-center" style="display:none;">
                             <span class="text-white font-bold text-lg">💰</span>
                         </div>
                         <h1 class="ml-3 text-xl font-semibold text-gray-900">Save Money</h1>
@@ -576,6 +871,15 @@
                         <button onclick="showTransactionModal()" class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-medium">
                             + Thêm giao dịch
                         </button>
+                        <div class="flex items-center space-x-2">
+                            <div class="text-right">
+                                <p id="currentUserName" class="text-sm font-medium text-gray-900">Người dùng</p>
+                                <p id="currentUserEmail" class="text-xs text-gray-500">user@email.com</p>
+                            </div>
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold text-sm" id="userAvatar">U</span>
+                            </div>
+                        </div>
                         <button onclick="logout()" class="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-lg text-sm">
                             Đăng xuất
                         </button>
@@ -937,11 +1241,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
-                                    <input type="text" value="Nguyễn Văn A" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                    <input type="text" id="settingsFullname" value="Nguyễn Văn A" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                    <input type="email" value="nguyenvana@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                    <input type="email" id="settingsEmail" value="nguyenvana@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" readonly>
                                 </div>
                             </div>
                         </div>
@@ -1054,9 +1358,15 @@
     </div>
 
     <script>
+        // Authentication variables
+        let currentUser = null;
+        
         // Modal functions
         function showLoginModal() {
             document.getElementById('loginModal').classList.remove('hidden');
+            // Reset form
+            document.getElementById('loginForm').reset();
+            hideErrorMessage('loginError');
         }
 
         function hideLoginModal() {
@@ -1065,16 +1375,222 @@
 
         function showRegisterModal() {
             document.getElementById('registerModal').classList.remove('hidden');
+            // Reset form
+            document.getElementById('registerForm').reset();
+            hideErrorMessage('registerError');
         }
 
         function hideRegisterModal() {
             document.getElementById('registerModal').classList.add('hidden');
         }
+        
+        // Utility functions for error handling
+        function showErrorMessage(elementId, message) {
+            const errorEl = document.getElementById(elementId);
+            const textEl = errorEl.querySelector('p');
+            textEl.textContent = message;
+            errorEl.classList.remove('hidden');
+        }
+        
+        function hideErrorMessage(elementId) {
+            const errorEl = document.getElementById(elementId);
+            errorEl.classList.add('hidden');
+        }
+        
+        // Authentication functions
+        async function handleLogin(email, password, rememberMe) {
+            try {
+                const response = await fetch('/save_money/php/api_login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store user info
+                    currentUser = data.data.user;
+                    
+                    // Save to localStorage if remember me is checked
+                    if (rememberMe) {
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    } else {
+                        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    }
+                    
+                    // Update UI and enter app
+                    updateUserInfo();
+                    enterApp();
+                    
+                    return { success: true };
+                } else {
+                    return { success: false, message: data.message };
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                return { success: false, message: 'Lỗi kết nối. Vui lòng thử lại.' };
+            }
+        }
+        
+        async function handleRegister(fullname, email, password, confirmPassword) {
+            try {
+                const response = await fetch('/save_money/php/api_register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fullname: fullname,
+                        email: email,
+                        password: password,
+                        confirmPassword: confirmPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    return { success: true, message: data.message };
+                } else {
+                    return { success: false, message: data.message };
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                return { success: false, message: 'Lỗi kết nối. Vui lòng thử lại.' };
+            }
+        }
+        
+        // Update user info in navigation and settings
+        function updateUserInfo() {
+            if (currentUser) {
+                // Update navigation
+                document.getElementById('currentUserName').textContent = currentUser.fullname;
+                document.getElementById('currentUserEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
+                
+                // Update settings page
+                document.getElementById('settingsFullname').value = currentUser.fullname;
+                document.getElementById('settingsEmail').value = currentUser.email;
+            }
+        }
+        
+        // Check if user is logged in on page load
+        function checkAuthStatus() {
+            const storedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            
+            if (storedUser) {
+                try {
+                    currentUser = JSON.parse(storedUser);
+                    updateUserInfo();
+                    enterApp();
+                } catch (error) {
+                    console.error('Error parsing stored user data:', error);
+                    localStorage.removeItem('currentUser');
+                    sessionStorage.removeItem('currentUser');
+                }
+            }
+        }
+        
+        // Form event listeners
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (!email || !password) {
+                showErrorMessage('loginError', 'Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            // Show loading state
+            const button = document.getElementById('loginButton');
+            const originalText = button.textContent;
+            button.textContent = 'Đang đăng nhập...';
+            button.disabled = true;
+            
+            hideErrorMessage('loginError');
+            
+            const result = await handleLogin(email, password, rememberMe);
+            
+            // Reset button state
+            button.textContent = originalText;
+            button.disabled = false;
+            
+            if (!result.success) {
+                showErrorMessage('loginError', result.message);
+            }
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullname = document.getElementById('registerFullname').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Client-side validation
+            if (!fullname || !email || !password || !confirmPassword) {
+                showErrorMessage('registerError', 'Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showErrorMessage('registerError', 'Mật khẩu xác nhận không khớp');
+                return;
+            }
+            
+            if (!isPasswordValid(password)) {
+                showErrorMessage('registerError', 'Mật khẩu phải có ít nhất 6 ký tự, 1 chữ cái và 1 số');
+                return;
+            }
+            
+
+            
+            // Show loading state
+            const button = document.getElementById('registerButton');
+            const originalText = button.textContent;
+            button.textContent = 'Đang tạo tài khoản...';
+            button.disabled = true;
+            
+            hideErrorMessage('registerError');
+            
+            const result = await handleRegister(fullname, email, password, confirmPassword);
+            
+            // Reset button state
+            button.textContent = originalText;
+            button.disabled = false;
+            
+            if (result.success) {
+                // Show success message and switch to login
+                alert(result.message);
+                hideRegisterModal();
+                showLoginModal();
+                // Pre-fill email in login form
+                document.getElementById('loginEmail').value = email;
+            } else {
+                showErrorMessage('registerError', result.message);
+            }
+        });
 
 
 
         // Logout function
         function logout() {
+            // Clear user data
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+            
+            // Show welcome page
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('welcomePage').style.display = 'flex';
         }
@@ -1206,16 +1722,33 @@
         });
 
         document.getElementById('loginModal').addEventListener('click', function(e) {
+            // Only close if clicking on the backdrop, not on form content
             if (e.target === this) {
                 hideLoginModal();
             }
         });
 
         document.getElementById('registerModal').addEventListener('click', function(e) {
+            // Only close if clicking on the backdrop, not on form content
             if (e.target === this) {
                 hideRegisterModal();
             }
         });
+        
+        // Additional protection against unwanted modal closing
+        document.getElementById('loginModal').addEventListener('mousedown', function(e) {
+            if (e.target !== this) {
+                e.stopPropagation();
+            }
+        });
+        
+        document.getElementById('registerModal').addEventListener('mousedown', function(e) {
+            if (e.target !== this) {
+                e.stopPropagation();
+            }
+        });
+        
+
 
         // Chart management
         let currentChartIndex = 0;
@@ -1820,6 +2353,346 @@
                 loadDashboardStats();
                 loadRecentTransactions();
             }, 100);
+        }
+        
+        // Piggy Bank Interactions
+        function setupPiggyBankAnimation() {
+            const piggyBank = document.querySelector('.piggy-bank');
+            const coinContainer = document.querySelector('.coin-container');
+            const sparkles = document.querySelector('.piggy-sparkles');
+            
+            if (piggyBank) {
+                // Click effect
+                piggyBank.addEventListener('click', function() {
+                    // Create burst effect
+                    createCoinBurst();
+                    
+                    // Add special shake animation
+                    this.style.animation = 'piggyShake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        this.style.animation = 'piggyFloat 4s ease-in-out infinite';
+                    }, 500);
+                    
+                    // Play sound effect (optional)
+                    playPiggySound();
+                });
+                
+                // Hover effects
+                piggyBank.addEventListener('mouseenter', function() {
+                    sparkles.style.display = 'block';
+                    coinContainer.style.display = 'block';
+                });
+            }
+        }
+        
+        function createCoinBurst() {
+            const container = document.querySelector('.piggy-bank-container');
+            
+            // Create multiple coins for burst effect
+            for (let i = 0; i < 8; i++) {
+                const coin = document.createElement('div');
+                coin.className = 'burst-coin';
+                coin.textContent = '₫';
+                coin.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: 20px;
+                    height: 20px;
+                    background: linear-gradient(45deg, #ffd700, #ffed4e);
+                    border-radius: 50%;
+                    font-size: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #b45309;
+                    font-weight: bold;
+                    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+                    pointer-events: none;
+                    z-index: 10;
+                    animation: coinBurst${i} 1s ease-out forwards;
+                `;
+                
+                // Add burst animation for each coin
+                const angle = (360 / 8) * i;
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes coinBurst${i} {
+                        0% {
+                            transform: translate(-50%, -50%) rotate(0deg) scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(-50%, -50%) 
+                                      translate(${Math.cos(angle * Math.PI / 180) * 60}px, 
+                                               ${Math.sin(angle * Math.PI / 180) * 60}px) 
+                                      rotate(360deg) scale(0);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                container.appendChild(coin);
+                
+                // Remove coin after animation
+                setTimeout(() => {
+                    if (coin.parentNode) {
+                        coin.parentNode.removeChild(coin);
+                    }
+                    if (style.parentNode) {
+                        style.parentNode.removeChild(style);
+                    }
+                }, 1000);
+            }
+        }
+        
+        function playPiggySound() {
+            // Create audio context for coin sound effect
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                try {
+                    const audioContext = new (AudioContext || webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.2);
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (e) {
+                    // Silent fail if audio context not available
+                }
+            }
+        }
+
+        // Initialize app on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            checkAuthStatus();
+            
+            // Setup modal event listeners after DOM is loaded
+            setupModalEventListeners();
+            
+            // Setup password validation
+            setupPasswordValidation();
+            
+            // Setup piggy bank animation
+            setupPiggyBankAnimation();
+        });
+        
+        // Setup password validation event listeners
+        function setupPasswordValidation() {
+            const passwordInput = document.getElementById('registerPassword');
+            const confirmPasswordInput = document.getElementById('registerConfirmPassword');
+            
+            if (passwordInput) {
+                // Show/hide rules on focus/blur
+                passwordInput.addEventListener('focus', function() {
+                    updatePasswordRules(this.value);
+                });
+                
+                passwordInput.addEventListener('blur', function() {
+                    // Hide rules only if password is empty
+                    if (this.value.length === 0) {
+                        document.getElementById('passwordRules').classList.add('hidden');
+                    }
+                });
+                
+                // Real-time validation as user types
+                passwordInput.addEventListener('input', function() {
+                    updatePasswordRules(this.value);
+                    
+                    // Also update confirm password validation if it has value
+                    if (confirmPasswordInput && confirmPasswordInput.value) {
+                        validateConfirmPassword();
+                    }
+                });
+            }
+            
+            if (confirmPasswordInput) {
+                confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+                confirmPasswordInput.addEventListener('blur', validateConfirmPassword);
+            }
+        }
+        
+        // Validate confirm password
+        function validateConfirmPassword() {
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const confirmInput = document.getElementById('registerConfirmPassword');
+            
+            if (confirmPassword.length > 0) {
+                if (password === confirmPassword) {
+                    confirmInput.classList.remove('border-red-300');
+                    confirmInput.classList.add('border-green-300');
+                } else {
+                    confirmInput.classList.remove('border-green-300');
+                    confirmInput.classList.add('border-red-300');
+                }
+            } else {
+                confirmInput.classList.remove('border-red-300', 'border-green-300');
+            }
+        }
+        
+        // Password validation functions
+        function validatePassword(password) {
+            const rules = {
+                length: password.length >= 6,
+                letter: /[a-zA-Z]/.test(password),
+                number: /\d/.test(password)
+            };
+            
+            return rules;
+        }
+        
+        function updatePasswordRules(password) {
+            const rules = validatePassword(password);
+            const rulesContainer = document.getElementById('passwordRules');
+            
+            // Show rules when password field is focused
+            if (password.length > 0 || document.getElementById('registerPassword') === document.activeElement) {
+                rulesContainer.classList.remove('hidden');
+            } else {
+                rulesContainer.classList.add('hidden');
+            }
+            
+            // Update length rule
+            const lengthRule = document.getElementById('lengthRule');
+            const lengthText = document.getElementById('lengthText');
+            if (rules.length) {
+                lengthRule.className = 'w-4 h-4 rounded-full bg-green-500 flex items-center justify-center password-rule-icon';
+                lengthRule.innerHTML = '<span class="text-white text-xs">✓</span>';
+                lengthText.className = 'password-rule-valid';
+            } else {
+                lengthRule.className = 'w-4 h-4 rounded-full bg-red-500 flex items-center justify-center password-rule-icon';
+                lengthRule.innerHTML = '<span class="text-white text-xs">✗</span>';
+                lengthText.className = 'password-rule-invalid';
+            }
+            
+            // Update letter rule
+            const letterRule = document.getElementById('letterRule');
+            const letterText = document.getElementById('letterText');
+            if (rules.letter) {
+                letterRule.className = 'w-4 h-4 rounded-full bg-green-500 flex items-center justify-center password-rule-icon';
+                letterRule.innerHTML = '<span class="text-white text-xs">✓</span>';
+                letterText.className = 'password-rule-valid';
+            } else {
+                letterRule.className = 'w-4 h-4 rounded-full bg-red-500 flex items-center justify-center password-rule-icon';
+                letterRule.innerHTML = '<span class="text-white text-xs">✗</span>';
+                letterText.className = 'password-rule-invalid';
+            }
+            
+            // Update number rule
+            const numberRule = document.getElementById('numberRule');
+            const numberText = document.getElementById('numberText');
+            if (rules.number) {
+                numberRule.className = 'w-4 h-4 rounded-full bg-green-500 flex items-center justify-center password-rule-icon';
+                numberRule.innerHTML = '<span class="text-white text-xs">✓</span>';
+                numberText.className = 'password-rule-valid';
+            } else {
+                numberRule.className = 'w-4 h-4 rounded-full bg-red-500 flex items-center justify-center password-rule-icon';
+                numberRule.innerHTML = '<span class="text-white text-xs">✗</span>';
+                numberText.className = 'password-rule-invalid';
+            }
+            
+            return rules.length && rules.letter && rules.number;
+        }
+        
+        function isPasswordValid(password) {
+            const rules = validatePassword(password);
+            return rules.length && rules.letter && rules.number;
+        }
+
+        // Setup modal event listeners
+        function setupModalEventListeners() {
+            // Prevent modal closing when clicking inside the modal content
+            const loginModalContent = document.querySelector('#loginModal .bg-white');
+            const registerModalContent = document.querySelector('#registerModal .bg-white');
+            const transactionModalContent = document.querySelector('#transactionModal .bg-white');
+            
+            if (loginModalContent) {
+                loginModalContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Additional protection for input fields
+                const loginInputs = loginModalContent.querySelectorAll('input, button, textarea, select');
+                loginInputs.forEach(input => {
+                    input.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mousedown', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mouseup', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('selectstart', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('select', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
+            
+            if (registerModalContent) {
+                registerModalContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Additional protection for input fields
+                const registerInputs = registerModalContent.querySelectorAll('input, button, textarea, select');
+                registerInputs.forEach(input => {
+                    input.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mousedown', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mouseup', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('selectstart', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('select', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
+            
+            if (transactionModalContent) {
+                transactionModalContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Additional protection for input fields
+                const transactionInputs = transactionModalContent.querySelectorAll('input, button, textarea, select');
+                transactionInputs.forEach(input => {
+                    input.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mousedown', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mouseup', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('selectstart', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('select', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
         }
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971b58de676708d9',t:'MTc1NTYyNDI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
