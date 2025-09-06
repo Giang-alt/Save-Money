@@ -23,9 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 try {
-    // Sử dụng file config để kết nối database
-    require_once 'config.php';
-    $pdo = initializeDatabase();
+    // Sử dụng file connect để kết nối database
+    require_once 'connect.php';
+    $pdo = getConnection();
+    
+    // Set UTF-8 charset
+    $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
     
     // Lấy tham số thời gian (mặc định là tháng hiện tại)
     $month = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
@@ -70,36 +73,30 @@ try {
     }
     
     // Tính tổng thu nhập
-    $incomeQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_income 
-                    FROM giao_dich 
-                    $dateCondition AND loai = 'income'";
-    
-    if (!empty($params)) {
+    if (!empty($dateCondition)) {
+        $incomeQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_income FROM giao_dich $dateCondition AND loai = 'income'";
         $stmt = $pdo->prepare($incomeQuery);
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
         }
         $stmt->execute();
     } else {
-        $incomeQuery = str_replace("$dateCondition AND", "WHERE", $incomeQuery);
+        $incomeQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_income FROM giao_dich WHERE loai = 'income'";
         $stmt = $pdo->prepare($incomeQuery);
         $stmt->execute();
     }
     $totalIncome = $stmt->fetch(PDO::FETCH_ASSOC)['total_income'];
     
     // Tính tổng chi tiêu
-    $expenseQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_expense 
-                     FROM giao_dich 
-                     $dateCondition AND loai = 'expense'";
-    
-    if (!empty($params)) {
+    if (!empty($dateCondition)) {
+        $expenseQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_expense FROM giao_dich $dateCondition AND loai = 'expense'";
         $stmt = $pdo->prepare($expenseQuery);
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
         }
         $stmt->execute();
     } else {
-        $expenseQuery = str_replace("$dateCondition AND", "WHERE", $expenseQuery);
+        $expenseQuery = "SELECT COALESCE(SUM(so_tien), 0) as total_expense FROM giao_dich WHERE loai = 'expense'";
         $stmt = $pdo->prepare($expenseQuery);
         $stmt->execute();
     }
@@ -183,21 +180,15 @@ try {
     $todayTransactions = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
     
     // Danh mục chi tiêu nhiều nhất (trong khoảng thời gian được chọn)
-    $topCategoryQuery = "SELECT danh_muc, SUM(so_tien) as total 
-                        FROM giao_dich 
-                        $dateCondition AND loai = 'expense' 
-                        GROUP BY danh_muc 
-                        ORDER BY total DESC 
-                        LIMIT 1";
-    
-    if (!empty($params)) {
+    if (!empty($dateCondition)) {
+        $topCategoryQuery = "SELECT danh_muc, SUM(so_tien) as total FROM giao_dich $dateCondition AND loai = 'expense' GROUP BY danh_muc ORDER BY total DESC LIMIT 1";
         $stmt = $pdo->prepare($topCategoryQuery);
         foreach ($params as $key => $value) {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
         }
         $stmt->execute();
     } else {
-        $topCategoryQuery = str_replace("$dateCondition AND", "WHERE", $topCategoryQuery);
+        $topCategoryQuery = "SELECT danh_muc, SUM(so_tien) as total FROM giao_dich WHERE loai = 'expense' GROUP BY danh_muc ORDER BY total DESC LIMIT 1";
         $stmt = $pdo->prepare($topCategoryQuery);
         $stmt->execute();
     }

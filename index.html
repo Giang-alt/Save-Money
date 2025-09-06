@@ -14,9 +14,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap');
         
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Nunito', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-feature-settings: 'kern' 1;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .gradient-bg {
@@ -386,216 +391,6 @@
             color: #dc2626;
         }
         
-        /* Piggy Bank Animation Styles */
-        .piggy-bank-container {
-            position: relative;
-            display: inline-block;
-            margin: 0 20px 50px 20px; /* Tăng margin bottom để tạo khoảng cách với title */
-        }
-        
-        .piggy-bank {
-            font-size: 6rem; /* Tăng từ 4rem lên 6rem - to hơn 50% */
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            animation: piggyFloat 4s ease-in-out infinite;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .piggy-bank:hover {
-            animation: piggyShake 0.5s ease-in-out;
-        }
-        
-        @keyframes piggyFloat {
-            0%, 100% { 
-                transform: translateY(0px) scale(1);
-            }
-            25% { 
-                transform: translateY(-5px) scale(1.02);
-            }
-            50% { 
-                transform: translateY(0px) scale(1);
-            }
-            75% { 
-                transform: translateY(-3px) scale(0.98);
-            }
-        }
-        
-        @keyframes piggyShake {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(-3deg) scale(1.1); }
-            75% { transform: rotate(3deg) scale(1.1); }
-        }
-        
-        @keyframes piggyBlink {
-            0%, 90%, 100% { opacity: 1; }
-            95% { opacity: 0.3; }
-        }
-        
-        .piggy-eyes {
-            position: absolute;
-            top: 25%; /* Giảm từ 30% xuống 25% để không bị đè */
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.8rem; /* Tăng từ 1.2rem lên 1.8rem - to hơn */
-            z-index: 3;
-            animation: piggyBlink 6s ease-in-out infinite;
-        }
-        
-        /* Coin Drop Animation */
-        .coin-container {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 200px;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        
-        .coin {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(45deg, #ffd700, #ffed4e);
-            border-radius: 50%;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b45309;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-            animation: coinDrop 2s ease-in infinite;
-            opacity: 0;
-        }
-        
-        .coin:nth-child(1) { 
-            left: 20%;
-            animation-delay: 0s;
-        }
-        .coin:nth-child(2) { 
-            left: 50%;
-            animation-delay: 0.7s;
-        }
-        .coin:nth-child(3) { 
-            left: 80%;
-            animation-delay: 1.4s;
-        }
-        
-        @keyframes coinDrop {
-            0% {
-                top: -20px;
-                opacity: 1;
-                transform: rotate(0deg) scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: rotate(180deg) scale(0.8);
-            }
-            70% {
-                top: 120px;
-                opacity: 1;
-                transform: rotate(270deg) scale(0.6);
-            }
-            100% {
-                top: 150px;
-                opacity: 0;
-                transform: rotate(360deg) scale(0);
-            }
-        }
-        
-        /* Sparkle effect around piggy */
-        .piggy-sparkles {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            pointer-events: none;
-        }
-        
-        .sparkle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #ffd700;
-            border-radius: 50%;
-            animation: sparkleFloat 3s ease-in-out infinite;
-            opacity: 0;
-        }
-        
-        .sparkle:nth-child(1) { 
-            top: 10%; left: 20%; 
-            animation-delay: 0s;
-        }
-        .sparkle:nth-child(2) { 
-            top: 20%; right: 10%; 
-            animation-delay: 0.5s;
-        }
-        .sparkle:nth-child(3) { 
-            bottom: 20%; left: 10%; 
-            animation-delay: 1s;
-        }
-        .sparkle:nth-child(4) { 
-            bottom: 10%; right: 20%; 
-            animation-delay: 1.5s;
-        }
-        
-        @keyframes sparkleFloat {
-            0%, 100% { 
-                opacity: 0; 
-                transform: scale(0) translateY(0px);
-            }
-            50% { 
-                opacity: 1; 
-                transform: scale(1) translateY(-10px);
-            }
-        }
-        
-        /* Special hover animation for coins */
-        .piggy-bank-container:hover .coin {
-            animation-duration: 1s;
-        }
-        
-        .piggy-bank-container:hover .sparkle {
-            animation-duration: 1.5s;
-        }
-        
-        /* Responsive design for piggy bank */
-        @media (max-width: 768px) {
-            .piggy-bank {
-                font-size: 4.5rem; /* Tăng từ 3rem lên 4.5rem */
-            }
-            
-            .piggy-bank-container {
-                margin: 0 10px 40px 10px; /* Thêm margin bottom */
-            }
-            
-            .coin-container {
-                width: 80px;
-                height: 150px;
-            }
-            
-            .coin {
-                width: 16px;
-                height: 16px;
-                font-size: 10px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .piggy-bank {
-                font-size: 3.5rem; /* Tăng từ 2.5rem lên 3.5rem */
-            }
-            
-            .piggy-eyes {
-                font-size: 1.4rem; /* Tăng từ 1rem lên 1.4rem */
-                top: 22%; /* Điều chỉnh vị trí cho mobile */
-            }
-        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -636,30 +431,6 @@
         
         <div class="flex items-center justify-center min-h-screen">
             <div class="text-center z-10 px-4">
-                <!-- Piggy Bank Animation - Above Title -->
-                <div class="title-animation mb-6">
-                    <div class="flex justify-center">
-                        <div class="piggy-bank-container">
-                            <div class="piggy-bank" title="Click me! 🐷">🐷</div>
-                            <div class="piggy-eyes">👀</div>
-                            
-                            <!-- Coin Drop Animation -->
-                            <div class="coin-container">
-                                <div class="coin">₫</div>
-                                <div class="coin">₫</div>
-                                <div class="coin">₫</div>
-                            </div>
-                            
-                            <!-- Sparkle Effects -->
-                            <div class="piggy-sparkles">
-                                <div class="sparkle"></div>
-                                <div class="sparkle"></div>
-                                <div class="sparkle"></div>
-                                <div class="sparkle"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <!-- Animated Title -->
                 <div class="title-animation">
@@ -1047,73 +818,112 @@
 
             <!-- Budget Page -->
             <div id="budget" class="page hidden">
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="text-xl font-semibold text-gray-900 mb-6">Quản lý ngân sách</h2>
+                <!-- Budget Overview -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">Quản lý ngân sách</h2>
+                        <button onclick="showBudgetModal()" class="btn-primary text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            + Tạo ngân sách mới
+                        </button>
+                    </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div class="p-4 border border-gray-200 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium text-gray-900">Ăn uống</span>
-                                    <span class="text-sm text-gray-500">2,500,000₫ / 3,000,000₫</span>
+                    <!-- Budget List -->
+                    <div id="budgetList" class="space-y-4">
+                        <!-- Budget items will be loaded here -->
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-green-600 h-2 rounded-full" style="width: 83%"></div>
-                                </div>
-                                <p class="text-sm text-gray-500 mt-1">Còn lại: 500,000₫</p>
                             </div>
                             
-                            <div class="p-4 border border-gray-200 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium text-gray-900">Di chuyển</span>
-                                    <span class="text-sm text-gray-500">1,800,000₫ / 2,000,000₫</span>
+                <!-- Budget Statistics -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Tổng ngân sách</h3>
+                        <p id="totalBudget" class="text-2xl font-bold text-green-600">0₫</p>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 90%"></div>
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Đã chi tiêu</h3>
+                        <p id="totalSpent" class="text-2xl font-bold text-blue-600">0₫</p>
                                 </div>
-                                <p class="text-sm text-gray-500 mt-1">Còn lại: 200,000₫</p>
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Còn lại</h3>
+                        <p id="totalRemaining" class="text-2xl font-bold text-gray-600">0₫</p>
                             </div>
-                            
-                            <div class="p-4 border border-gray-200 rounded-lg">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="font-medium text-gray-900">Giải trí</span>
-                                    <span class="text-sm text-gray-500">1,200,000₫ / 1,000,000₫</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
                                 </div>
-                                <p class="text-sm text-red-600 mt-1">Vượt ngân sách: 200,000₫</p>
-                            </div>
+            
+            <!-- Budget Modal -->
+            <div id="budgetModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900">Thiết lập ngân sách</h3>
+                            <button onclick="closeBudgetModal()" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
                         
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Thiết lập ngân sách mới</h3>
-                            <div class="space-y-4">
+                        <form id="budgetForm" class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Danh mục</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                                        <option>Chọn danh mục</option>
-                                        <option>Ăn uống</option>
-                                        <option>Di chuyển</option>
-                                        <option>Mua sắm</option>
-                                        <option>Giải trí</option>
+                                <select id="budgetCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                                    <option value="">Chọn danh mục</option>
+                                    <option value="Ăn uống">Ăn uống</option>
+                                    <option value="Di chuyển">Di chuyển</option>
+                                    <option value="Mua sắm">Mua sắm</option>
+                                    <option value="Giải trí">Giải trí</option>
+                                    <option value="Hóa đơn">Hóa đơn</option>
+                                    <option value="Y tế">Y tế</option>
+                                    <option value="Giáo dục">Giáo dục</option>
+                                    <option value="Khác">Khác</option>
                                     </select>
                                 </div>
+                            
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Hạn mức (₫)</label>
-                                    <input type="number" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <input type="text" id="budgetAmount" placeholder="Nhập số tiền..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
                                 </div>
+                            
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Thời gian</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                                        <option>Hàng tháng</option>
-                                        <option>Hàng tuần</option>
-                                        <option>Hàng năm</option>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Chu kỳ</label>
+                                <select id="budgetPeriod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
+                                    <option value="monthly">Hàng tháng</option>
+                                    <option value="weekly">Hàng tuần</option>
+                                    <option value="daily">Hàng ngày</option>
                                     </select>
                                 </div>
-                                <button class="w-full btn-primary text-white py-2 rounded-lg">Tạo ngân sách</button>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ngày bắt đầu</label>
+                                    <input type="date" id="budgetStartDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
                             </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ngày kết thúc</label>
+                                    <input type="date" id="budgetEndDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" required>
                         </div>
+                    </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Cảnh báo khi chi tiêu đạt (%)</label>
+                                <select id="budgetAlert" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                    <option value="50">50%</option>
+                                    <option value="70">70%</option>
+                                    <option value="80" selected>80%</option>
+                                    <option value="90">90%</option>
+                                    <option value="100">100%</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex space-x-4 pt-4">
+                                <button type="button" onclick="closeBudgetModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                                    Hủy
+                                </button>
+                                <button type="submit" class="flex-1 btn-primary text-white px-4 py-2 rounded-lg">
+                                    Tạo ngân sách
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1355,16 +1165,92 @@
                 </div>
             </div>
         </div>
+
+        <!-- Edit Transaction Modal -->
+        <div id="editTransactionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto modal-enter">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">Chỉnh sửa giao dịch</h3>
+                        <button onclick="hideEditTransactionModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+                    </div>
+                    
+                    <form id="editTransactionForm" class="space-y-4">
+                        <input type="hidden" id="editTransactionId">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Loại giao dịch</label>
+                            <select id="editTransactionType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="expense">Chi tiêu</option>
+                                <option value="income">Thu nhập</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Danh mục</label>
+                            <select id="editTransactionCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="Ăn uống">🍕 Ăn uống</option>
+                                <option value="Di chuyển">⛽ Di chuyển</option>
+                                <option value="Mua sắm">🛍️ Mua sắm</option>
+                                <option value="Giải trí">🎬 Giải trí</option>
+                                <option value="Hóa đơn">📄 Hóa đơn</option>
+                                <option value="Lương">💰 Lương</option>
+                                <option value="Thưởng">🎁 Thưởng</option>
+                                <option value="Khác">📝 Khác</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Số tiền (₫)</label>
+                            <input type="text" id="editTransactionAmount" placeholder="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" oninput="formatAmount(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ngày</label>
+                            <input type="date" id="editTransactionDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+                            <input type="text" id="editTransactionNote" placeholder="Mô tả giao dịch..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" onclick="hideEditTransactionModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg border border-gray-300">
+                                Hủy
+                            </button>
+                            <button type="submit" class="btn-primary text-white px-4 py-2 rounded-lg">
+                                Cập nhật
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
+        // Global error handler
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            console.error('Error details:', {
+                message: e.message,
+                filename: e.filename,
+                lineno: e.lineno,
+                colno: e.colno
+            });
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
+        
         // Authentication variables
         let currentUser = null;
         
         // Modal functions
         function showLoginModal() {
             document.getElementById('loginModal').classList.remove('hidden');
-            // Reset form
             document.getElementById('loginForm').reset();
             hideErrorMessage('loginError');
         }
@@ -1375,7 +1261,6 @@
 
         function showRegisterModal() {
             document.getElementById('registerModal').classList.remove('hidden');
-            // Reset form
             document.getElementById('registerForm').reset();
             hideErrorMessage('registerError');
         }
@@ -1414,17 +1299,14 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Store user info
                     currentUser = data.data.user;
                     
-                    // Save to localStorage if remember me is checked
                     if (rememberMe) {
                         localStorage.setItem('currentUser', JSON.stringify(currentUser));
                     } else {
                         sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
                     }
                     
-                    // Update UI and enter app
                     updateUserInfo();
                     enterApp();
                     
@@ -1469,12 +1351,10 @@
         // Update user info in navigation and settings
         function updateUserInfo() {
             if (currentUser) {
-                // Update navigation
                 document.getElementById('currentUserName').textContent = currentUser.fullname;
                 document.getElementById('currentUserEmail').textContent = currentUser.email;
                 document.getElementById('userAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
                 
-                // Update settings page
                 document.getElementById('settingsFullname').value = currentUser.fullname;
                 document.getElementById('settingsEmail').value = currentUser.email;
             }
@@ -1483,10 +1363,12 @@
         // Check if user is logged in on page load
         function checkAuthStatus() {
             const storedUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+            console.log('Stored user:', storedUser);
             
             if (storedUser) {
                 try {
                     currentUser = JSON.parse(storedUser);
+                    console.log('Parsed currentUser:', currentUser);
                     updateUserInfo();
                     enterApp();
                 } catch (error) {
@@ -1494,6 +1376,15 @@
                     localStorage.removeItem('currentUser');
                     sessionStorage.removeItem('currentUser');
                 }
+            } else {
+                console.log('No stored user found, creating mock user for testing');
+                currentUser = {
+                    id: 1,
+                    fullname: 'Hoàng Lê Giang',
+                    email: 'giang@gmail.com'
+                };
+                updateUserInfo();
+                enterApp();
             }
         }
         
@@ -1510,7 +1401,6 @@
                 return;
             }
             
-            // Show loading state
             const button = document.getElementById('loginButton');
             const originalText = button.textContent;
             button.textContent = 'Đang đăng nhập...';
@@ -1520,7 +1410,6 @@
             
             const result = await handleLogin(email, password, rememberMe);
             
-            // Reset button state
             button.textContent = originalText;
             button.disabled = false;
             
@@ -1537,7 +1426,6 @@
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
             
-            // Client-side validation
             if (!fullname || !email || !password || !confirmPassword) {
                 showErrorMessage('registerError', 'Vui lòng điền đầy đủ thông tin');
                 return;
@@ -1555,7 +1443,6 @@
             
 
             
-            // Show loading state
             const button = document.getElementById('registerButton');
             const originalText = button.textContent;
             button.textContent = 'Đang tạo tài khoản...';
@@ -1565,16 +1452,13 @@
             
             const result = await handleRegister(fullname, email, password, confirmPassword);
             
-            // Reset button state
             button.textContent = originalText;
             button.disabled = false;
             
             if (result.success) {
-                // Show success message and switch to login
                 alert(result.message);
                 hideRegisterModal();
                 showLoginModal();
-                // Pre-fill email in login form
                 document.getElementById('loginEmail').value = email;
             } else {
                 showErrorMessage('registerError', result.message);
@@ -1585,32 +1469,50 @@
 
         // Logout function
         function logout() {
-            // Clear user data
             currentUser = null;
             localStorage.removeItem('currentUser');
             sessionStorage.removeItem('currentUser');
             
-            // Show welcome page
             document.getElementById('mainApp').classList.add('hidden');
             document.getElementById('welcomePage').style.display = 'flex';
         }
 
-        // Navigation functionality
+        // Navigation functionality with loop support
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.add('hidden');
             });
             
-            // Show selected page
             document.getElementById(pageId).classList.remove('hidden');
             document.getElementById(pageId).classList.add('fade-in');
             
-            // Update navigation
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.onclick && item.onclick.toString().includes(pageId)) {
+                    item.classList.add('active');
+                }
+            });
+            
+            window.currentPage = pageId;
+        }
+        
+        // Navigation loop functions
+        function nextPage() {
+            const pages = ['dashboard', 'transactions', 'budget', 'reports', 'settings'];
+            const currentIndex = pages.indexOf(window.currentPage || 'dashboard');
+            const nextIndex = (currentIndex + 1) % pages.length;
+            showPage(pages[nextIndex]);
+        }
+        
+        function prevPage() {
+            const pages = ['dashboard', 'transactions', 'budget', 'reports', 'settings'];
+            const currentIndex = pages.indexOf(window.currentPage || 'dashboard');
+            const prevIndex = (currentIndex - 1 + pages.length) % pages.length;
+            showPage(pages[prevIndex]);
         }
 
         // Transaction modal functionality
@@ -1618,11 +1520,9 @@
             const modal = document.getElementById('transactionModal');
             modal.classList.remove('hidden');
             
-            // Set today's date as default
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('transactionDate').value = today;
             
-            // Focus on amount field
             setTimeout(() => {
                 document.getElementById('transactionAmount').focus();
             }, 100);
@@ -1632,32 +1532,129 @@
             const modal = document.getElementById('transactionModal');
             modal.classList.add('hidden');
             
-            // Reset form
             document.getElementById('transactionForm').reset();
+        }
+
+        // Edit transaction modal functionality
+        async function editTransaction(transactionId) {
+            try {
+                const response = await fetch(`php/api_lay_giao_dich.php?id=${transactionId}`);
+                const data = await response.json();
+                
+                if (data.success && data.data.transactions.length > 0) {
+                    const transaction = data.data.transactions[0];
+                    
+                    document.getElementById('editTransactionId').value = transaction.id;
+                    document.getElementById('editTransactionType').value = transaction.loai;
+                    document.getElementById('editTransactionCategory').value = transaction.danh_muc;
+                    document.getElementById('editTransactionAmount').value = formatNumber(transaction.so_tien);
+                    document.getElementById('editTransactionDate').value = transaction.ngay;
+                    document.getElementById('editTransactionNote').value = transaction.ghi_chu || '';
+                    
+                    const modal = document.getElementById('editTransactionModal');
+                    modal.classList.remove('hidden');
+                } else {
+                    alert('Không thể tải thông tin giao dịch: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error loading transaction:', error);
+                alert('Có lỗi xảy ra khi tải thông tin giao dịch');
+            }
+        }
+
+        function hideEditTransactionModal() {
+            const modal = document.getElementById('editTransactionModal');
+            modal.classList.add('hidden');
+            
+            document.getElementById('editTransactionForm').reset();
+        }
+
+        // Delete transaction functionality
+        async function deleteTransaction(transactionId) {
+            const confirmMessage = 'Bạn có chắc chắn muốn xóa giao dịch này không?\n\n' +
+                                 '⚠️ Hành động này không thể hoàn tác!\n' +
+                                 'Giao dịch sẽ bị xóa vĩnh viễn khỏi hệ thống.';
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            const deleteButton = document.querySelector(`button[onclick="deleteTransaction(${transactionId})"]`);
+            if (deleteButton) {
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = `
+                    <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                `;
+            }
+            
+            try {
+                const response = await fetch(`php/api_xoa_giao_dich.php?id=${transactionId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('✅ Xóa giao dịch thành công!');
+                    
+                    loadAllTransactions(1, true);
+                    
+                    if (window.currentPage === 'dashboard') {
+                        loadRecentTransactions();
+                    }
+                    
+                    if (window.currentPage === 'budget') {
+                        loadBudgets();
+                    }
+                } else {
+                    alert('❌ Lỗi: ' + result.message);
+                    if (deleteButton) {
+                        deleteButton.disabled = false;
+                        deleteButton.innerHTML = `
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+                alert('❌ Có lỗi xảy ra khi xóa giao dịch!');
+                if (deleteButton) {
+                    deleteButton.disabled = false;
+                    deleteButton.innerHTML = `
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    `;
+                }
+            }
+        }
+
+        // Helper function to format number with dots
+        function formatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
         }
 
         // Function để format số tiền
         function formatAmount(input) {
-            // Loại bỏ tất cả ký tự không phải số
             let value = input.value.replace(/[^\d]/g, '');
             
-            // Nếu không có giá trị, để trống
             if (value === '') {
                 input.value = '';
                 return;
             }
             
-            // Chuyển đổi thành số và format với dấu phẩy
             let numValue = parseInt(value);
             input.value = numValue.toLocaleString('vi-VN');
         }
         
-        // Function để lấy số tiền thực từ input đã format
         function getAmountValue(input) {
             return parseInt(input.value.replace(/[^\d]/g, ''));
         }
         
-        // Handle form submission
         document.getElementById('transactionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -1701,6 +1698,10 @@
                     loadRecentTransactions();
                     loadDashboardStats();
                     
+                    if (window.currentPage === 'budget') {
+                        loadBudgets();
+                    }
+                    
                     // Hide modal and reset form
                     hideTransactionModal();
                 } else {
@@ -1718,6 +1719,66 @@
         document.getElementById('transactionModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 hideTransactionModal();
+            }
+        });
+
+        document.getElementById('editTransactionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideEditTransactionModal();
+            }
+        });
+
+        // Edit transaction form submit
+        document.getElementById('editTransactionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get and validate form data
+            const amountValue = document.getElementById('editTransactionAmount').value;
+            const cleanAmount = amountValue.replace(/\./g, '');
+            const parsedAmount = parseFloat(cleanAmount);
+            
+            if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                alert('Vui lòng nhập số tiền hợp lệ');
+                return;
+            }
+            
+            const formData = {
+                id: parseInt(document.getElementById('editTransactionId').value),
+                loai: document.getElementById('editTransactionType').value,
+                danh_muc: document.getElementById('editTransactionCategory').value,
+                so_tien: parsedAmount,
+                ngay: document.getElementById('editTransactionDate').value,
+                ghi_chu: document.getElementById('editTransactionNote').value,
+                user_id: currentUser ? currentUser.id : null
+            };
+            
+            try {
+                const response = await fetch('php/api_cap_nhat_giao_dich.php', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    hideEditTransactionModal();
+                    alert('Cập nhật giao dịch thành công!');
+                    
+                    // Reload transactions
+                    loadAllTransactions(1, true);
+                    
+                    if (window.currentPage === 'budget') {
+                        loadBudgets();
+                    }
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error updating transaction:', error);
+                alert('Có lỗi xảy ra khi cập nhật giao dịch!');
             }
         });
 
@@ -1875,12 +1936,24 @@
 
         function updateChart() {
             const currentChart = chartTypes[currentChartIndex];
+            
             const titleElement = document.getElementById('chartTitle');
             const descriptionElement = document.getElementById('chartDescription');
-            const chartContainer = document.querySelector('#reportChart').parentElement;
+            const reportChartElement = document.querySelector('#reportChart');
             
+            if (!reportChartElement) {
+                return;
+            }
+            
+            const chartContainer = reportChartElement.parentElement;
+            
+            if (titleElement) {
             titleElement.textContent = currentChart.title;
+            }
+            
+            if (descriptionElement) {
             descriptionElement.innerHTML = `<p class="text-sm text-gray-600">${currentChart.description}</p>`;
+            }
             
             if (currentChart.type === 'table') {
                 // Show detailed table
@@ -2059,8 +2132,15 @@
         
         // Function to create transaction HTML
         function createTransactionHTML(transaction) {
-            const icon = getCategoryIcon(transaction.category);
-            const isIncome = transaction.type === 'income';
+            // Map database field names to expected names
+            const category = transaction.danh_muc || transaction.category;
+            const type = transaction.loai || transaction.type;
+            const amount = transaction.so_tien || transaction.amount;
+            const date = transaction.ngay || transaction.date;
+            const note = transaction.ghi_chu || transaction.note;
+            
+            const icon = getCategoryIcon(category);
+            const isIncome = type === 'income';
             const amountClass = isIncome ? 'text-green-600' : 'text-red-600';
             const bgClass = isIncome ? 'bg-green-100' : 'bg-red-100';
             const iconClass = isIncome ? 'text-green-600' : 'text-red-600';
@@ -2073,11 +2153,25 @@
                             <span class="${iconClass}">${icon}</span>
                         </div>
                         <div>
-                            <p class="font-medium text-gray-900">${transaction.note || transaction.category}</p>
-                            <p class="text-sm text-gray-500">${transaction.category} • ${formatDate(transaction.date)}</p>
+                            <p class="font-medium text-gray-900">${note || category}</p>
+                            <p class="text-sm text-gray-500">${category} • ${formatDate(date)}</p>
                         </div>
                     </div>
-                    <span class="${amountClass} font-semibold">${amountPrefix}${formatCurrency(transaction.amount)}</span>
+                    <div class="flex items-center space-x-3">
+                        <span class="${amountClass} font-semibold">${amountPrefix}${formatCurrency(amount)}</span>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="editTransaction(${transaction.id})" class="text-blue-500 hover:text-blue-700 p-1 rounded transition-colors" title="Chỉnh sửa">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="deleteTransaction(${transaction.id})" class="text-red-500 hover:text-red-700 p-1 rounded transition-colors" title="Xóa">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -2085,7 +2179,7 @@
         // Function to load recent transactions (3 latest)
         async function loadRecentTransactions() {
             try {
-                const response = await fetch('/save_money/php/api_lay_giao_dich.php?limit=3');
+                const response = await fetch('php/api_lay_giao_dich.php?limit=3');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -2121,6 +2215,18 @@
         
         // Function to load all transactions with pagination
         async function loadAllTransactions(page = 1, resetList = true) {
+            if (resetList) {
+                const container = document.getElementById('allTransactionsList');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="flex justify-center items-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                            <span class="ml-2 text-gray-600">Đang tải...</span>
+                        </div>
+                    `;
+                }
+            }
+            
             try {
                 const params = new URLSearchParams({
                     limit: TRANSACTIONS_PER_PAGE,
@@ -2131,8 +2237,28 @@
                 if (currentFilters.type) params.append('type', currentFilters.type);
                 if (currentFilters.category) params.append('category', currentFilters.category);
                 
-                const response = await fetch(`/save_money/php/api_lay_giao_dich.php?${params}`);
-                const data = await response.json();
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                
+                const response = await fetch(`php/api_lay_giao_dich.php?${params}`, {
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                let data;
+                const responseText = await response.text();
+                try {
+                    data = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response text:', responseText);
+                    throw new Error('Invalid JSON response from server');
+                }
                 
                 if (data.success) {
                     const container = document.getElementById('allTransactionsList');
@@ -2173,14 +2299,23 @@
                 }
             } catch (error) {
                 console.error('Lỗi khi tải danh sách giao dịch:', error);
-                document.getElementById('allTransactionsList').innerHTML = `
+                const container = document.getElementById('allTransactionsList');
+                if (container) {
+                    container.innerHTML = `
                     <div class="text-center py-8">
                         <div class="text-red-400 text-4xl mb-2">⚠️</div>
                         <p class="text-red-500">Không thể tải dữ liệu</p>
-                        <p class="text-gray-400 text-sm">Vui lòng thử lại sau</p>
+                            <p class="text-gray-400 text-sm">Lỗi: ${error.message || 'Unknown error'}</p>
+                            <button onclick="loadAllTransactions(1, true)" class="mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                                Thử lại
+                            </button>
                     </div>
                 `;
-                document.getElementById('loadMoreContainer').classList.add('hidden');
+                }
+                const loadMoreContainer = document.getElementById('loadMoreContainer');
+                if (loadMoreContainer) {
+                    loadMoreContainer.classList.add('hidden');
+                }
             }
         }
         
@@ -2221,7 +2356,7 @@
         // Function to load dashboard statistics
         async function loadDashboardStats() {
             try {
-                const response = await fetch('/save_money/php/api_thong_ke.php?period=current_month');
+                const response = await fetch('php/api_thong_ke.php?period=current_month');
                 const data = await response.json();
                 
                 if (data.success) {
@@ -2355,121 +2490,6 @@
             }, 100);
         }
         
-        // Piggy Bank Interactions
-        function setupPiggyBankAnimation() {
-            const piggyBank = document.querySelector('.piggy-bank');
-            const coinContainer = document.querySelector('.coin-container');
-            const sparkles = document.querySelector('.piggy-sparkles');
-            
-            if (piggyBank) {
-                // Click effect
-                piggyBank.addEventListener('click', function() {
-                    // Create burst effect
-                    createCoinBurst();
-                    
-                    // Add special shake animation
-                    this.style.animation = 'piggyShake 0.5s ease-in-out';
-                    setTimeout(() => {
-                        this.style.animation = 'piggyFloat 4s ease-in-out infinite';
-                    }, 500);
-                    
-                    // Play sound effect (optional)
-                    playPiggySound();
-                });
-                
-                // Hover effects
-                piggyBank.addEventListener('mouseenter', function() {
-                    sparkles.style.display = 'block';
-                    coinContainer.style.display = 'block';
-                });
-            }
-        }
-        
-        function createCoinBurst() {
-            const container = document.querySelector('.piggy-bank-container');
-            
-            // Create multiple coins for burst effect
-            for (let i = 0; i < 8; i++) {
-                const coin = document.createElement('div');
-                coin.className = 'burst-coin';
-                coin.textContent = '₫';
-                coin.style.cssText = `
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: 20px;
-                    height: 20px;
-                    background: linear-gradient(45deg, #ffd700, #ffed4e);
-                    border-radius: 50%;
-                    font-size: 12px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #b45309;
-                    font-weight: bold;
-                    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-                    pointer-events: none;
-                    z-index: 10;
-                    animation: coinBurst${i} 1s ease-out forwards;
-                `;
-                
-                // Add burst animation for each coin
-                const angle = (360 / 8) * i;
-                const style = document.createElement('style');
-                style.textContent = `
-                    @keyframes coinBurst${i} {
-                        0% {
-                            transform: translate(-50%, -50%) rotate(0deg) scale(1);
-                            opacity: 1;
-                        }
-                        100% {
-                            transform: translate(-50%, -50%) 
-                                      translate(${Math.cos(angle * Math.PI / 180) * 60}px, 
-                                               ${Math.sin(angle * Math.PI / 180) * 60}px) 
-                                      rotate(360deg) scale(0);
-                            opacity: 0;
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
-                container.appendChild(coin);
-                
-                // Remove coin after animation
-                setTimeout(() => {
-                    if (coin.parentNode) {
-                        coin.parentNode.removeChild(coin);
-                    }
-                    if (style.parentNode) {
-                        style.parentNode.removeChild(style);
-                    }
-                }, 1000);
-            }
-        }
-        
-        function playPiggySound() {
-            // Create audio context for coin sound effect
-            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
-                try {
-                    const audioContext = new (AudioContext || webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.2);
-                    
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.2);
-                } catch (e) {
-                    // Silent fail if audio context not available
-                }
-            }
-        }
 
         // Initialize app on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -2482,9 +2502,48 @@
             // Setup password validation
             setupPasswordValidation();
             
-            // Setup piggy bank animation
-            setupPiggyBankAnimation();
+            // Setup keyboard navigation
+            setupKeyboardNavigation();
+            
         });
+        
+        // Setup keyboard navigation
+        function setupKeyboardNavigation() {
+            document.addEventListener('keydown', function(event) {
+                // Only work when not in input fields
+                if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+                
+                // Arrow key navigation
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    prevPage();
+                } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    nextPage();
+                }
+                
+                // Number key shortcuts
+                switch(event.key) {
+                    case '1':
+                        showPage('dashboard');
+                        break;
+                    case '2':
+                        showPage('transactions');
+                        break;
+                    case '3':
+                        showPage('budget');
+                        break;
+                    case '4':
+                        showPage('reports');
+                        break;
+                    case '5':
+                        showPage('settings');
+                        break;
+                }
+            });
+        }
         
         // Setup password validation event listeners
         function setupPasswordValidation() {
@@ -2615,6 +2674,7 @@
             const loginModalContent = document.querySelector('#loginModal .bg-white');
             const registerModalContent = document.querySelector('#registerModal .bg-white');
             const transactionModalContent = document.querySelector('#transactionModal .bg-white');
+            const editTransactionModalContent = document.querySelector('#editTransactionModal .bg-white');
             
             if (loginModalContent) {
                 loginModalContent.addEventListener('click', function(e) {
@@ -2693,7 +2753,313 @@
                     });
                 });
             }
+            
+            if (editTransactionModalContent) {
+                editTransactionModalContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Additional protection for input fields
+                const editTransactionInputs = editTransactionModalContent.querySelectorAll('input, button, textarea, select');
+                editTransactionInputs.forEach(input => {
+                    input.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mousedown', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('mouseup', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('selectstart', function(e) {
+                        e.stopPropagation();
+                    });
+                    input.addEventListener('select', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
         }
+        
+        // =====================================================
+        // BUDGET MANAGEMENT FUNCTIONS
+        // =====================================================
+        
+        // Format money function
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+        }
+        
+        // Format date function
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+        
+        // Show/Hide Budget Modal
+        function showBudgetModal() {
+            const modal = document.getElementById('budgetModal');
+            modal.classList.remove('hidden');
+            
+            // Set default dates
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            
+            document.getElementById('budgetStartDate').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('budgetEndDate').value = lastDay.toISOString().split('T')[0];
+        }
+        
+        function closeBudgetModal() {
+            const modal = document.getElementById('budgetModal');
+            modal.classList.add('hidden');
+            document.getElementById('budgetForm').reset();
+        }
+        
+        // Budget Form Submit
+        document.getElementById('budgetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            createBudget();
+        });
+        
+        // Setup budget amount formatting
+        document.getElementById('budgetAmount').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+            if (value) {
+                // Add thousand separators
+                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                e.target.value = value;
+            }
+        });
+        
+        async function createBudget() {
+            const category = document.getElementById('budgetCategory').value;
+            const amountString = document.getElementById('budgetAmount').value.replace(/\./g, ''); // Remove dots
+            const amount = parseFloat(amountString);
+            const period = document.getElementById('budgetPeriod').value;
+            const startDate = document.getElementById('budgetStartDate').value;
+            const endDate = document.getElementById('budgetEndDate').value;
+            const alertPercentage = parseFloat(document.getElementById('budgetAlert').value);
+            
+            if (!category || !amount || !startDate || !endDate) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+            
+            // Create budget object
+            const budgetData = {
+                user_id: currentUser.id,
+                category: category,
+                budget_amount: amount,
+                period_type: period,
+                start_date: startDate,
+                end_date: endDate,
+                alert_percentage: alertPercentage
+            };
+            
+            try {
+                const response = await fetch('php/api_budget.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(budgetData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    closeBudgetModal();
+                    loadBudgets();
+                    alert('Tạo ngân sách thành công!');
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error creating budget:', error);
+                alert('Có lỗi xảy ra khi tạo ngân sách!');
+            }
+        }
+        
+        // Load and display budgets
+        async function loadBudgets() {
+            if (!currentUser) {
+                console.error('currentUser is not set');
+                return;
+            }
+            
+            console.log('Loading budgets for user:', currentUser.id);
+            
+            try {
+                const response = await fetch(`php/api_budget.php?user_id=${currentUser.id}`);
+                const result = await response.json();
+                
+                console.log('Budget API response:', result);
+                
+                if (!result.success) {
+                    console.error('Error loading budgets:', result.message);
+                    return;
+                }
+                
+                const userBudgets = result.data;
+            
+            const budgetList = document.getElementById('budgetList');
+            
+            if (userBudgets.length === 0) {
+                budgetList.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <p>Chưa có ngân sách nào được thiết lập</p>
+                        <button onclick="showBudgetModal()" class="mt-2 text-green-600 hover:text-green-700">Tạo ngân sách đầu tiên</button>
+                    </div>
+                `;
+                updateBudgetStats(0, 0, 0);
+                return;
+            }
+            
+            let totalBudget = 0;
+            let totalSpent = 0;
+            
+            // Calculate spent amounts for all budgets
+            const budgetPromises = userBudgets.map(async (budget) => {
+                const spent = await calculateSpentAmount(budget.category, budget.start_date, budget.end_date);
+                const percentage = budget.budget_amount > 0 ? (spent / budget.budget_amount) * 100 : 0;
+                const remaining = budget.budget_amount - spent;
+                
+                totalBudget += budget.budget_amount;
+                totalSpent += spent;
+                
+                return { budget, spent, percentage, remaining };
+            });
+            
+            const budgetResults = await Promise.all(budgetPromises);
+            
+            budgetList.innerHTML = budgetResults.map(({ budget, spent, percentage, remaining }) => {
+                
+                let progressColor = 'bg-green-500';
+                let textColor = 'text-gray-600';
+                let statusText = `Còn lại: ${formatMoney(remaining)}`;
+                
+                if (percentage >= 100) {
+                    progressColor = 'bg-red-500';
+                    textColor = 'text-red-600';
+                    statusText = `Vượt ngân sách: ${formatMoney(spent - budget.budget_amount)}`;
+                } else if (percentage >= budget.alert_percentage) {
+                    progressColor = 'bg-yellow-500';
+                    textColor = 'text-yellow-600';
+                }
+                
+                return `
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium text-gray-900">${budget.category}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">${formatMoney(spent)} / ${formatMoney(budget.budget_amount)}</span>
+                                <button onclick="deleteBudget(${budget.id})" class="text-red-500 hover:text-red-700 text-sm">Xóa</button>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="${progressColor} h-2 rounded-full" style="width: ${Math.min(percentage, 100)}%"></div>
+                        </div>
+                        <p class="text-sm ${textColor} mt-1">${statusText}</p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            ${budget.period_type === 'monthly' ? 'Hàng tháng' : budget.period_type === 'weekly' ? 'Hàng tuần' : 'Hàng ngày'} • 
+                            ${formatDate(budget.start_date)} - ${formatDate(budget.end_date)}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+            
+            updateBudgetStats(totalBudget, totalSpent, totalBudget - totalSpent);
+            
+            } catch (error) {
+                console.error('Error loading budgets:', error);
+                const budgetList = document.getElementById('budgetList');
+                budgetList.innerHTML = `
+                    <div class="text-center py-8 text-red-500">
+                        <p>Có lỗi xảy ra khi tải ngân sách</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function calculateSpentAmount(category, startDate, endDate) {
+            try {
+                const params = new URLSearchParams({
+                    user_id: currentUser?.id || 1,
+                    loai: 'chi',
+                    danh_muc: category,
+                    tu_ngay: startDate,
+                    den_ngay: endDate
+                });
+                
+                const response = await fetch(`php/api_lay_giao_dich.php?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const transactions = data.data.transactions || [];
+                    return transactions.reduce((total, t) => total + parseFloat(t.amount), 0);
+                }
+                return 0;
+            } catch (error) {
+                console.error('Error calculating spent amount:', error);
+                return 0;
+            }
+        }
+        
+        // Update budget statistics
+        function updateBudgetStats(totalBudget, totalSpent, totalRemaining) {
+            document.getElementById('totalBudget').textContent = formatMoney(totalBudget);
+            document.getElementById('totalSpent').textContent = formatMoney(totalSpent);
+            document.getElementById('totalRemaining').textContent = formatMoney(totalRemaining);
+        }
+        
+        // Delete budget
+        async function deleteBudget(budgetId) {
+            if (!confirm('Bạn có chắc muốn xóa ngân sách này?')) return;
+            
+            try {
+                const response = await fetch(`php/api_budget.php?id=${budgetId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadBudgets();
+                    alert('Xóa ngân sách thành công!');
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting budget:', error);
+                alert('Có lỗi xảy ra khi xóa ngân sách!');
+            }
+        }
+        
+        // Load data when showing specific pages
+        const originalShowPage = showPage;
+        showPage = function(pageId) {
+            originalShowPage(pageId);
+            if (pageId === 'budget') {
+                loadBudgets();
+            } else if (pageId === 'transactions') {
+                loadAllTransactions(1, true);
+            } else if (pageId === 'reports') {
+                // Initialize charts when entering reports page
+                currentChartIndex = 0; // Reset to first chart (doughnut)
+                setTimeout(() => {
+                    const titleElement = document.getElementById('chartTitle');
+                    const descriptionElement = document.getElementById('chartDescription');
+                    const reportChartElement = document.querySelector('#reportChart');
+                    
+                    if (titleElement && descriptionElement && reportChartElement) {
+                        updateChart();
+                    } else {
+                        setTimeout(updateChart, 500);
+                    }
+                }, 300);
+            }
+        };
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'971b58de676708d9',t:'MTc1NTYyNDI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
